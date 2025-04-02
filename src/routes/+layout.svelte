@@ -1,7 +1,16 @@
 <script lang="ts">
-	import '../app.css';
+  import type { LayoutProps } from './$types';
+  import '../app.css';
+  import Nav from '$lib/components/Nav.svelte';
+  import Footer from '$lib/components/Footer.svelte';
 
-	let { children } = $props();
+  let { data, children }: LayoutProps = $props();
 </script>
 
-{@render children()}
+<Nav content={data.sections.nav} />
+
+<div class="">
+  {@render children()}
+</div>
+
+<Footer />

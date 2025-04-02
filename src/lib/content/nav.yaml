@@ -1,0 +1,9 @@
+logo:
+  src: /images/kompismoln-logo.svg
+  alt: kompismoln logo
+searchPage: false
+links:
+  - text: Blogg
+    href: /blogg
+  - text: Logga in
+    href: https://nc.kompismoln.se
