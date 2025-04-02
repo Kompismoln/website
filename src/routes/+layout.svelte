@@ -13,4 +13,4 @@
   {@render children()}
 </div>
 
-<Footer />
+<Footer content={data.sections.footer} />

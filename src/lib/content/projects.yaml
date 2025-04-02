@@ -34,3 +34,35 @@ list:
     linkText: 'Docs'
     newPage: true
     svgContent: ''
+  - name: 'Free to host'
+    description: >
+      Instructions included for Cloudflare+Supabase.
+      Free to start, and cost effective to scale.
+    link: 'https://example.com'
+    linkText: 'Docs'
+    newPage: true
+    svgContent: ''
+  - name: 'Free to host'
+    description: >
+      Instructions included for Cloudflare+Supabase.
+      Free to start, and cost effective to scale.
+    link: 'https://example.com'
+    linkText: 'Docs'
+    newPage: true
+    svgContent: ''
+  - name: 'Free to host'
+    description: >
+      Instructions included for Cloudflare+Supabase.
+      Free to start, and cost effective to scale.
+    link: 'https://example.com'
+    linkText: 'Docs'
+    newPage: true
+    svgContent: ''
+  - name: 'Free to host'
+    description: >
+      Instructions included for Cloudflare+Supabase.
+      Free to start, and cost effective to scale.
+    link: 'https://example.com'
+    linkText: 'Docs'
+    newPage: true
+    svgContent: ''
