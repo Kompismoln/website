@@ -1,8 +1,11 @@
 import fs from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import yaml from 'js-yaml';
+
+export const prerender = true;
 
 type ContentData = {
   body?: string;
@@ -13,47 +16,12 @@ marked.use({
   async: false
 });
 
-async function loadSectionData(fileName: string) {
-  const filePath = path.resolve(process.cwd(), 'src/lib/content/', fileName);
-  const extension = path.extname(fileName);
-
-  if (extension === '.js' || extension === '.ts') {
-    return (await import(/* @vite-ignore */ filePath)).default;
-  }
-
-  const fileContent = await fs.readFile(filePath, 'utf-8');
-
-  if (extension === '.md') {
-    const { data: frontmatter, content: markdownContent } = matter(fileContent);
-    return {
-      ...frontmatter,
-      body: marked.parse(markdownContent)
-    };
-  } else if (extension === '.yaml' || extension === '.yml') {
-    const data = yaml.load(fileContent) as ContentData;
-    if (data.body) {
-      data.body = marked.parse(data.body) as string;
-    }
-    return data;
-  } else if (extension === '.json') {
-    const data = JSON.parse(fileContent);
-    if (data.body) {
-      data.body = marked.parse(data.body);
-    }
-  }
-  return {};
-}
-
 export async function load() {
-  try {
-    const hero = await loadSectionData('hero.md');
-    const prospects = await loadSectionData('prospects.yaml');
-    const nav = await loadSectionData('nav.yaml');
-    const projects = await loadSectionData('projects.yaml');
-    const footer = await loadSectionData('footer.yaml');
+  const sections = ['nav', 'hero', 'prospects', 'projects', 'nextcloud', 'footer'];
 
+  try {
     return {
-      sections: { nav, hero, prospects, projects, footer }
+      sections: await Promise.all(sections.map(async (name) => await loadContent(name)))
     };
   } catch (e) {
     console.error('Error loading page data:', e);
@@ -61,4 +29,44 @@ export async function load() {
   }
 }
 
-export const prerender = true;
+async function loadContent(baseName: string) {
+  const extensions = ['md', 'yaml', 'json', 'ts', 'js'];
+  const basePath = path.resolve(process.cwd(), 'src/lib/content/', baseName);
+
+  const foundExt = extensions.find((ext) => existsSync(`${basePath}.${ext}`));
+
+  if (!foundExt) {
+    const msg = `File not found: ${baseName} with extensions ${extensions.join(', ')}`;
+    throw new Error(msg);
+  }
+
+  const filePath = `${basePath}.${foundExt}`;
+
+  if (foundExt === 'js' || foundExt === 'ts') {
+    return (await import(/* @vite-ignore */ filePath)).default;
+  }
+
+  const fileContent = await fs.readFile(filePath, 'utf-8');
+
+  if (foundExt === 'md') {
+    const { data: frontmatter, content: markdownContent } = matter(fileContent);
+    return {
+      ...frontmatter,
+      body: marked.parse(markdownContent)
+    };
+  }
+  if (foundExt === 'yaml') {
+    const data = yaml.load(fileContent) as ContentData;
+    if (data.body) {
+      data.body = marked.parse(data.body) as string;
+    }
+    return data;
+  }
+  if (foundExt === 'json') {
+    const data = JSON.parse(fileContent);
+    if (data.body) {
+      data.body = marked.parse(data.body);
+    }
+    return data;
+  }
+}

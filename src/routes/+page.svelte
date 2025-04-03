@@ -1,14 +1,11 @@
 <script lang="ts">
   import type { PageProps } from './$types';
-  import Hero from '$lib/components/Hero.svelte';
-  import Swipe from '$lib/components/Swipe.svelte';
-  import Grid from '$lib/components/Grid.svelte';
-  import Dual from '$lib/components/Dual.svelte';
+  import { getComponent } from '$lib/components/index';
 
   let { data }: PageProps = $props();
 </script>
 
-<Hero content={data.sections.hero} />
-<Swipe content={data.sections.prospects} />
-<Grid content={data.sections.projects} />
-<Dual />
+{#each data.sections as content}
+  {@const Component = getComponent(content.component)}
+  <Component {content} />
+{/each}

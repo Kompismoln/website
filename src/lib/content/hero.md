@@ -1,4 +1,5 @@
 ---
+component: Hero
 primer: 'Kompismoln.se'
 buttons:
   - text: '★ us on Github'
