@@ -7,7 +7,7 @@ import yaml from 'js-yaml';
 
 export const prerender = true;
 
-type ContentData = {
+type Section = {
   body?: string;
   [key: string]: any;
 };
@@ -17,11 +17,15 @@ marked.use({
 });
 
 export async function load() {
-  const sections = ['nav', 'hero', 'prospects', 'projects', 'nextcloud', 'footer'];
+  const page = await loadContent('index');
+  page.sections = page.sections.map((section: Section) => ({
+    ...section,
+    body: section?.body ? marked(section.body) : section.body
+  }));
 
   try {
     return {
-      sections: await Promise.all(sections.map(async (name) => await loadContent(name)))
+      sections: page.sections
     };
   } catch (e) {
     console.error('Error loading page data:', e);
@@ -49,24 +53,13 @@ async function loadContent(baseName: string) {
   const fileContent = await fs.readFile(filePath, 'utf-8');
 
   if (foundExt === 'md') {
-    const { data: frontmatter, content: markdownContent } = matter(fileContent);
-    return {
-      ...frontmatter,
-      body: marked.parse(markdownContent)
-    };
+    const { data, content: body } = matter(fileContent);
+    return { ...data, body };
   }
   if (foundExt === 'yaml') {
-    const data = yaml.load(fileContent) as ContentData;
-    if (data.body) {
-      data.body = marked.parse(data.body) as string;
-    }
-    return data;
+    return yaml.load(fileContent);
   }
   if (foundExt === 'json') {
-    const data = JSON.parse(fileContent);
-    if (data.body) {
-      data.body = marked.parse(data.body);
-    }
-    return data;
+    return JSON.parse(fileContent);
   }
 }
