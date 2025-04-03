@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { marked } from 'marked';
   let { content } = $props();
 </script>
 
 <div class="mx-auto max-w-lg text-center">
   <div class="markdown-content">
-    {@html content.body}
+    {@html marked(content.body)}
   </div>
 </div>
 

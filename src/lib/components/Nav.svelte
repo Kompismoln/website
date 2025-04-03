@@ -42,8 +42,8 @@
   </div>
   <div class="navbar-end">
     <ul class="menu menu-horizontal hidden text-lg font-bold sm:flex">
-      {#each content.links as link}
-        <li class="md:mx-2"><a href={link.href}>{link.text}</a></li>
+      {#each content.menu as item}
+        <li class="md:mx-2"><a href={item.href}>{item.text}</a></li>
       {/each}
       {#if content.searchPage}
         <li class="md:mx-0">

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { marked } from 'marked';
   let { content } = $props();
 </script>
 
@@ -10,7 +11,7 @@
       </div>
 
       <div class="markdown-content">
-        {@html content.body}
+        {@html marked(content.body)}
       </div>
       {#if content.buttons}
         <div class="mt-6 flex flex-row flex-wrap place-content-center gap-4 md:mt-4">

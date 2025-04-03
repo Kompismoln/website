@@ -1,15 +1,4 @@
 sections:
-  - component: Nav
-    logo:
-      src: /images/kompismoln-logo.svg
-      alt: kompismoln logo
-    searchPage: false
-    links:
-      - text: Blogg
-        href: /blogg
-      - text: Logga in
-        href: https://nc.kompismoln.se
-
   - component: Hero
     body: |
       # NixOS-baserad infrastruktur _till er tjänst_
@@ -135,24 +124,3 @@ sections:
 
   - component: Trio
     screenshot: images/nextcloud-screenshot.png
-
-  - component: Footer
-    logo:
-      src: /images/kompismoln-logo.svg
-      alt: kompismoln logo
-    license: Copyright © 2025 kompismoln. Concept copyrighted but code & design is free to use (MIT)
-    socials:
-      - platform: twitter
-        src: https://x.com
-      - platform: instagram
-        src: https://x.com
-      - platform: youtube
-        src: https://x.com
-      - platform: facebook
-        src: https://x.com
-      - platform: bluesky
-        src: https://x.com
-      - platform: tiktok
-        src: https://x.com
-      - platform: mastodon
-        src: https://x.com
