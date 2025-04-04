@@ -8,24 +8,22 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
   const path = `${params.path ? params.path + '/' : ''}page`;
+  const content = await loadContent(path);
 
-  try {
-    return await loadContent(path);
-  } catch (e) {
-    console.error('Error loading page data:', e);
-    error(404, `Content not found for ${path}`);
+  if (content) {
+    return content;
   }
+
+  error(404, `Content not found for ${path}`);
 };
 
 async function loadContent(baseName: string) {
   const extensions = ['md', 'yaml', 'json', 'ts', 'js'];
   const basePath = path.resolve(process.cwd(), 'src/lib/content/', baseName);
-
   const foundExt = extensions.find((ext) => existsSync(`${basePath}.${ext}`));
 
   if (!foundExt) {
-    const msg = `File not found: ${baseName} with extensions ${extensions.join(', ')}`;
-    throw new Error(msg);
+    return;
   }
 
   const filePath = `${basePath}.${foundExt}`;
