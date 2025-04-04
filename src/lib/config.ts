@@ -7,9 +7,10 @@ export default {
     src: '/images/kompismoln-logo.svg',
     alt: 'kompismoln-logo'
   },
+  contentRoot: 'src/lib/content',
   searchPage: false,
   menu: [
-    { text: 'Blogg', href: '/blogg' },
+    { text: 'Blogg', href: '/blog' },
     { text: 'Logga in', href: 'https://nc.kompismoln.se' }
   ],
   license:
