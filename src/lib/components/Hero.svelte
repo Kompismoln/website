@@ -1,21 +1,21 @@
 <script lang="ts">
   import { marked } from 'marked';
-  let { content } = $props();
+  let { primer, body, buttons } = $props();
 </script>
 
 <div class="hero min-h-[60vh]">
   <div class="hero-content py-12 text-center">
     <div class="max-w-xl">
       <div class="text-secondary mb-3 pb-1 text-xl font-bold md:mb-7 md:text-3xl">
-        {content.primer}
+        {primer}
       </div>
 
       <div class="markdown-content">
-        {@html marked(content.body)}
+        {@html marked(body)}
       </div>
-      {#if content.buttons}
+      {#if buttons}
         <div class="mt-6 flex flex-row flex-wrap place-content-center gap-4 md:mt-4">
-          {#each content.buttons as button}
+          {#each buttons as button}
             <a href={button.url}>
               <button class:btn-outline={!button.primary} class="btn btn-primary"
                 >{button.text}</button

@@ -7,5 +7,5 @@
 
 {#each data.sections as content}
   {@const Component = getComponent(content.component)}
-  <Component {content} />
+  <Component {...(({ component, ...rest }) => rest)(content)} />
 {/each}

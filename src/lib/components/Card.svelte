@@ -1,5 +1,5 @@
 <script>
-  let { content } = $props();
+  let { name, description, svgContent, newPage, link, linkText } = $props();
 </script>
 
 <div class="card bg-base-200 min-h-[300px] w-[270px]">
@@ -13,19 +13,19 @@
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {@html content.svgContent}
+        {@html svgContent}
       </svg>
     </div>
     <h2 class="card-title">
-      {content.name}
+      {name}
     </h2>
     <p class="pb-12">
-      {content.description}
+      {description}
     </p>
-    {#if content.link}
-      <a href={content.link} class="pb-12" target={content.newPage ? '_blank' : ''}>
+    {#if link}
+      <a href={link} class="pb-12" target={newPage ? '_blank' : ''}>
         <button class="btn btn-outline btn-primary min-w-[100px]"
-          >{content.linkText ? content.linkText : 'Try It'}</button
+          >{linkText ? linkText : 'Try It'}</button
         >
       </a>
     {/if}

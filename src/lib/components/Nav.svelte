@@ -1,10 +1,10 @@
 <script lang="ts">
-  let { content } = $props();
+  let { logo, searchPage, menu } = $props();
 </script>
 
 <div class="navbar bg-neutral text-neutral-content px-6">
   <div class="navbar-start">
-    <img class="h-20 w-20 flex-none object-contain" src={content.logo.src} alt={content.logo.alt} />
+    <img class="h-20 w-20 flex-none object-contain" src={logo.src} alt={logo.alt} />
   </div>
   <div class="navbar-center">
     <label class="flex cursor-pointer gap-2">
@@ -42,12 +42,12 @@
   </div>
   <div class="navbar-end">
     <ul class="menu menu-horizontal hidden text-lg font-bold sm:flex">
-      {#each content.menu as item}
+      {#each menu as item}
         <li class="md:mx-2"><a href={item.href}>{item.text}</a></li>
       {/each}
-      {#if content.searchPage}
+      {#if searchPage}
         <li class="md:mx-0">
-          <a href={content.searchPage} aria-label="Search">
+          <a href={searchPage} aria-label="Search">
             <svg class="h-6 w-6" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
               ><path
                 d="M17.545 15.467l-3.779-3.779a6.15 6.15 0 0 0 .898-3.21c0-3.417-2.961-6.377-6.378-6.377A6.185 6.185 0 0 0 2.1 8.287c0 3.416 2.961 6.377 6.377 6.377a6.15 6.15 0 0 0 3.115-.844l3.799 3.801a.953.953 0 0 0 1.346 0l.943-.943c.371-.371.236-.84-.135-1.211zM4.004 8.287a4.282 4.282 0 0 1 4.282-4.283c2.366 0 4.474 2.107 4.474 4.474a4.284 4.284 0 0 1-4.283 4.283c-2.366-.001-4.473-2.109-4.473-4.474z"
@@ -81,8 +81,8 @@
         tabindex="0"
         class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 font-bold shadow-sm"
       >
-        {#each content.links as link}
-          <li class="md:mx-2"><a href={link.href}>{link.text}</a></li>
+        {#each menu as item}
+          <li class="md:mx-2"><a href={item.href}>{item.text}</a></li>
         {/each}
       </ul>
     </div>

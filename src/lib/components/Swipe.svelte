@@ -5,7 +5,7 @@
   import { onMount } from 'svelte';
 
   register();
-  let { content } = $props();
+  let { body, list } = $props();
 
   onMount(() => {
     const swiperEl = document.querySelector('swiper-container');
@@ -30,7 +30,7 @@
 
 <div class="min-h-[60vh]">
   <div class="pt-20 pb-8 md:px-7">
-    <Intro {content} />
+    <Intro {body} />
     <div class="mx-auto mt-12 max-w-[1064px]">
       <swiper-container
         navigation="true"
@@ -39,9 +39,9 @@
         coverflow-effect-slide-shadows="false"
         init="false"
       >
-        {#each content.list as item}
+        {#each list as item}
           <swiper-slide class="flex items-center justify-center">
-            <Card content={item} />
+            <Card {...item} />
           </swiper-slide>
         {/each}
       </swiper-container>

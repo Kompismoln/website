@@ -1,16 +1,16 @@
 <script lang="ts">
-  let { content } = $props();
+  let { siteName, siteUrl, siteDescription } = $props();
   const ldJson = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: content.siteName,
-    url: content.siteUrl
+    name: siteName,
+    url: siteUrl
   };
   const jsonldScript = `<script type="application/ld+json">${JSON.stringify(ldJson) + '<'}/script>`;
 </script>
 
 <svelte:head>
-  <title>{content.siteName}</title>
-  <meta name="description" content={content.siteDescription} />
+  <title>{siteName}</title>
+  <meta name="description" content={siteDescription} />
   {@html jsonldScript}
 </svelte:head>
