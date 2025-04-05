@@ -8,6 +8,7 @@ export default {
     alt: 'kompismoln-logo'
   },
   contentRoot: 'src/lib/content',
+  componentRoot: 'src/lib/components',
   searchPage: false,
   menu: [
     { text: 'Blogg', href: '/blog' },
