@@ -8,9 +8,9 @@ import config from '$lib/config';
 interface PageContent {
   [key: string]: any;
 }
-
 export type SiteContent = Record<string, PageContent>;
-export const siteContent: SiteContent = await loadSiteContent();
+
+export default (await loadSiteContent()) as SiteContent;
 
 async function loadSiteContent() {
   const contentDir = path.resolve(process.cwd(), config.contentRoot);
