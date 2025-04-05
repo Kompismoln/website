@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { siteName, siteUrl, siteDescription } = $props();
+  let { siteName, pageName, siteUrl, siteDescription } = $props();
   const ldJson = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-  <title>{siteName}</title>
+  <title>{siteName} - {pageName}</title>
   <meta name="description" content={siteDescription} />
   {@html jsonldScript}
 </svelte:head>

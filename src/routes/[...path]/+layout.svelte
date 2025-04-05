@@ -5,12 +5,14 @@
   import Nav from '$lib/components/Nav.svelte';
   import Footer from '$lib/components/Footer.svelte';
   import config from '$lib/config';
+  import { page } from '$app/state';
 
   let { children }: LayoutProps = $props();
 </script>
 
 <Head
   siteName={config.siteName}
+  pageName={page.data.title}
   siteUrl={config.siteUrl}
   siteDescription={config.siteDescription}
 />
