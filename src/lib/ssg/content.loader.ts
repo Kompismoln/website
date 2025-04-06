@@ -1,14 +1,10 @@
+import type { SiteContent } from '$lib/ssg/types';
 import fs from 'node:fs/promises';
 import { globSync } from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import config from '$lib/config';
-
-interface PageContent {
-  [key: string]: any;
-}
-export type SiteContent = Record<string, PageContent>;
 
 export default (await loadSiteContent()) as SiteContent;
 
@@ -17,16 +13,14 @@ async function loadSiteContent() {
   const pattern = path.join(contentDir, '**', 'page.@(yaml|md|json|js|ts)');
   const files = globSync(pattern);
 
-  return Object.fromEntries(
-    await Promise.all(
-      files.map(async (file) => [getSitePath(contentDir, file), await parseFile(file)])
-    )
-  );
-}
+  const getSitePath = (file: string) => {
+    const p = path.dirname(path.relative(contentDir, file));
+    return p === '.' ? '' : p;
+  };
 
-function getSitePath(contentDir: string, file: string) {
-  const p = path.dirname(path.relative(contentDir, file));
-  return p === '.' ? '' : p;
+  return Object.fromEntries(
+    await Promise.all(files.map(async (file) => [getSitePath(file), await parseFile(file)]))
+  );
 }
 
 async function parseFile(filePath: string) {

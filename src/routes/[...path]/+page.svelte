@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { PageProps } from './$types';
-  import components from '$lib/ssg/component.loader';
-  import config from '$lib/config';
+  import type { ComponentProps } from '$lib/ssg/types';
+  import getComponent from '$lib/ssg/component.loader';
 
   let { data }: PageProps = $props();
-  let getComponent = (name: string) => components[`/${config.componentRoot}/${name}.svelte`];
 </script>
 
-{#each data.sections as content}
-  {@const Component = getComponent(content.component)}
-  <Component {...(({ component, ...rest }) => rest)(content)} />
+{#each data.components as content}
+  {@const { component, ...props } = content}
+  {@const Component = getComponent(component)}
+  <Component {...props as ComponentProps<typeof content>} />
 {/each}

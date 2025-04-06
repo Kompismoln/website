@@ -1,6 +1,11 @@
-import type { SvelteComponent } from 'svelte';
+import type { ComponentMap } from '$lib/ssg/types';
+import config from '$lib/config';
 
-export default import.meta.glob('$components/**/*.svelte', {
+const componentMap = import.meta.glob('$components/**/*.svelte', {
   eager: true,
   import: 'default'
-}) as Record<string, typeof SvelteComponent>;
+}) as ComponentMap;
+
+export default function (name: string) {
+  return componentMap[`/${config.componentRoot}/${name}.svelte`];
+}

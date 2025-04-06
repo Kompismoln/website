@@ -1,5 +1,5 @@
 ---
-sections:
+components:
   - component: Hero
     primer: 'kompismoln.se/tools'
     body: |
