@@ -17,3 +17,8 @@ export type SiteContent = Record<string, PageContent>;
 export interface ComponentMap {
   [name: string]: typeof SvelteComponent;
 }
+
+export interface ResolvedComponent<T extends ComponentContent = ComponentContent> {
+  component: typeof SvelteComponent;
+  props: ComponentProps<T>;
+}

@@ -1,11 +1,15 @@
-import type { ComponentMap } from '$lib/ssg/types';
+import type { ComponentMap, ComponentContent, ResolvedComponent } from '$lib/ssg/types';
 import config from '$lib/config';
 
-const componentMap = import.meta.glob('$components/**/*.svelte', {
+export const componentMap = import.meta.glob('$components/**/*.svelte', {
   eager: true,
   import: 'default'
 }) as ComponentMap;
 
-export default function (name: string) {
-  return componentMap[`/${config.componentRoot}/${name}.svelte`];
-}
+export const resolveComponent = (content: ComponentContent): ResolvedComponent => {
+  const { component, ...props } = content;
+  return {
+    component: componentMap[`/${config.componentRoot}/${component}.svelte`],
+    props
+  };
+};
