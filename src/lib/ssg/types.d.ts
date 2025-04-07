@@ -1,4 +1,5 @@
-import type { SvelteComponent } from 'svelte';
+import type { ComponentType } from 'svelte';
+import type { ZodSchema } from 'zod';
 
 export interface ComponentContent {
   component: string;
@@ -14,11 +15,14 @@ export interface PageContent {
 
 export type SiteContent = Record<string, PageContent>;
 
-export interface ComponentMap {
-  [name: string]: typeof SvelteComponent;
-}
+type ComponentModule = {
+  default: ComponentType;
+  schema?: ZodSchema<any>;
+};
+
+export type ComponentMap = Record<string, ComponentModule>;
 
 export interface ResolvedComponent<T extends ComponentContent = ComponentContent> {
-  component: typeof SvelteComponent;
+  component: ComponentType;
   props: ComponentProps<T>;
 }

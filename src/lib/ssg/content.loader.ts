@@ -6,22 +6,32 @@ import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import config from '$lib/config';
 
-export default (await loadSiteContent()) as SiteContent;
+const contentDir = path.resolve(process.cwd(), config.contentRoot);
 
-async function loadSiteContent() {
-  const contentDir = path.resolve(process.cwd(), config.contentRoot);
-  const pattern = path.join(contentDir, '**', 'page.@(yaml|md|json|js|ts)');
+export const loadPageContent = async (searchPath: string) => {
+  const siteContent = await loadSiteContent(searchPath);
+  return siteContent[searchPath];
+};
+
+export const loadSiteContent = async (searchPath?: string) => {
+  const pattern = path.join(contentDir, searchPath ?? '**', 'page.@(yaml|md|json|js|ts)');
   const files = globSync(pattern);
 
-  const getSitePath = (file: string) => {
+  const getPath = (file: string) => {
     const p = path.dirname(path.relative(contentDir, file));
     return p === '.' ? '' : p;
   };
 
   return Object.fromEntries(
-    await Promise.all(files.map(async (file) => [getSitePath(file), await parseFile(file)]))
+    await Promise.all(
+      files.map(async (file) => {
+        const path = getPath(file);
+        const content = await parseFile(file);
+        return [path, content];
+      })
+    )
   );
-}
+};
 
 async function parseFile(filePath: string) {
   const fileExt = path.extname(filePath);
@@ -43,3 +53,5 @@ async function parseFile(filePath: string) {
     return JSON.parse(fileContent);
   }
 }
+
+export const siteContent = (await loadSiteContent()) as SiteContent;
