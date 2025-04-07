@@ -10,24 +10,24 @@
 </script>
 
 <script lang="ts">
-  import { marked } from 'marked';
+  import { Marked, Renderer } from 'marked';
   const { body, button } = $props();
 
-  const renderer = new marked.Renderer();
+  const renderer = new Renderer();
   renderer.link = function ({ href, title, text }) {
     return `<a href="${href}" title="${title || ''}" class="link hover:link-primary">${text}</a>`;
   };
   renderer.em = function ({ text }) {
     return `<em class="decoration-secondary">${text}</em>`;
   };
-  marked.setOptions({ renderer });
+  const md = new Marked({ renderer });
 </script>
 
 <div class="mt-6 min-w-[270px] lg:mt-0 lg:min-w-[420px]">
   <div class="my-auto">
     <div class="px-4">
       <div class="markdown-content space-y-6">
-        {@html marked(body)}
+        {@html md.parse(body)}
       </div>
       <div class="mt-6 px-4 text-lg md:text-xl"></div>
       <div class="text-large mt-4">
