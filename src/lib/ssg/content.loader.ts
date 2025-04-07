@@ -1,57 +1,53 @@
-import type { SiteContent } from '$lib/ssg/types';
 import fs from 'node:fs/promises';
-import { globSync } from 'node:fs';
+import { globSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import config from '$lib/config';
 
-const contentDir = path.resolve(process.cwd(), config.contentRoot);
+const filetypes = ['js', 'ts', 'json', 'yaml', 'md'];
 
 export const loadPageContent = async (searchPath: string) => {
-  const siteContent = await loadSiteContent(searchPath);
-  return siteContent[searchPath];
+  const filePath = path.join(config.contentRoot, searchPath, 'page');
+  const fileContent = await parseFile(filePath);
+  return fileContent;
 };
 
-export const loadSiteContent = async (searchPath?: string) => {
-  const pattern = path.join(contentDir, searchPath ?? '**', 'page.@(yaml|md|json|js|ts)');
-  const files = globSync(pattern);
+export const loadEntries = async (key: string) => {
+  const pattern = path.join(config.contentRoot, '**', `page.@(${filetypes.join('|')})`);
 
-  const getPath = (file: string) => {
-    const p = path.dirname(path.relative(contentDir, file));
-    return p === '.' ? '' : p;
-  };
+  const entries = globSync(pattern).map((file) => {
+    const p = path.dirname(path.relative(config.contentRoot, file));
+    console.log(`adding entry '${p}'`);
+    return { [key]: p === '.' ? '' : p };
+  });
 
-  return Object.fromEntries(
-    await Promise.all(
-      files.map(async (file) => {
-        const path = getPath(file);
-        const content = await parseFile(file);
-        return [path, content];
-      })
-    )
-  );
+  return entries;
 };
 
-async function parseFile(filePath: string) {
-  const fileExt = path.extname(filePath);
+const parseFile = async (filePath: string) => {
+  const fileExt = filetypes.find((ext) => existsSync(`${filePath}.${ext}`));
 
-  if (['.js', '.ts'].includes(fileExt)) {
+  if (!fileExt) {
+    return;
+  }
+
+  filePath = `${filePath}.${fileExt}`;
+
+  if (['js', 'ts'].includes(fileExt)) {
     return (await import(/* @vite-ignore */ filePath)).default;
   }
 
   const fileContent = await fs.readFile(filePath, 'utf-8');
 
-  if (fileExt === '.md') {
+  if (fileExt === 'md') {
     const { data, content: body } = matter(fileContent);
     return { ...data, body };
   }
-  if (fileExt === '.yaml') {
+  if (fileExt === 'yaml') {
     return yaml.load(fileContent);
   }
-  if (fileExt === '.json') {
+  if (fileExt === 'json') {
     return JSON.parse(fileContent);
   }
-}
-
-export const siteContent = (await loadSiteContent()) as SiteContent;
+};
