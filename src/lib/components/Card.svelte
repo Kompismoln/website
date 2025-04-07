@@ -1,5 +1,24 @@
+<script module>
+  import { z } from 'zod';
+  export const schema = z.object({
+    title: z.string(),
+    description: z.string(),
+    image: z.object({
+      src: z.string(),
+      alt: z.string()
+    }),
+    link: z
+      .object({
+        src: z.string(),
+        text: z.string(),
+        blank: z.boolean().optional()
+      })
+      .optional()
+  });
+</script>
+
 <script>
-  let { title, description, image, link } = $props();
+  const { title, description, image, link } = $props();
 </script>
 
 <div class="card bg-base-200 min-h-[300px] w-[270px]">

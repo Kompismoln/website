@@ -1,3 +1,10 @@
+<script module>
+  import { z } from 'zod';
+  export const schema = z.object({
+    body: z.string()
+  });
+</script>
+
 <script lang="ts">
   import { marked } from 'marked';
   let { body } = $props();

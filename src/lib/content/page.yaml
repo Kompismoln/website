@@ -18,11 +18,14 @@ components:
         primary: false
 
   - component: Swipe
-    body: |
-      # Är din idé vårat nästa projekt?
-      Just nu söker vi ett nytt uppdrag inom något av _dessa områden_:
+    intro:
+      component: Blurb
+      body: |
+        # Är din idé vårat nästa projekt?
+        Just nu söker vi ett nytt uppdrag inom något av _dessa områden_:
     slides:
-      - name: 'Free to host'
+      - component: Card
+        title: 'Free to host'
         description: >
           Instructions included for Cloudflare+Supabase.
           Free to start, and cost effective to scale.
@@ -32,14 +35,17 @@ components:
         link:
           src: 'https://example.com'
           text: 'Docs'
-          blank: true,
+          blank: true
 
   - component: Grid
-    body: |
-      # Är din idé vårat nästa projekt?
-      Just nu söker vi ett nytt uppdrag inom något av _dessa områden_:
+    intro:
+      component: Blurb
+      body: |
+        # Är din idé vårat nästa projekt?
+        Just nu söker vi ett nytt uppdrag inom något av _dessa områden_:
     items:
-      - name: 'Free to host'
+      - component: Card
+        title: 'Free to host'
         description: >
           Instructions included for Cloudflare+Supabase.
           Free to start, and cost effective to scale.
@@ -49,7 +55,24 @@ components:
         link:
           src: 'https://example.com'
           text: 'Docs'
-          blank: true,
+          blank: true
+
+  - component: Dual
+    title: See it in action
+    slotA:
+      component: Mockup
+      src: https://example.com
+      blank: true
+      image:
+        src: https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/couch.svg
+        alt: couch
+    slotB:
+      component: Preview
+      body: |
+        # A title
+        A paragraph with *bold* text
+        A paragraph with **bold** text
+        And a [link](https://example.com)
 
   - component: Trio
     screenshot: images/nextcloud-screenshot.png

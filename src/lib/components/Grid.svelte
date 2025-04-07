@@ -1,15 +1,26 @@
+<script module>
+  import z from 'zod';
+  import { z_component } from '$lib/ssg/schemas';
+
+  export const schema = z.object({
+    intro: z_component('Blurb'),
+    items: z.array(z_component('Card'))
+  });
+</script>
+
 <script lang="ts">
-  import Intro from '$lib/components/Intro.svelte';
-  import Card from '$lib/components/Card.svelte';
-  let { body, items } = $props();
+  import { resolveComponent } from '$lib/ssg/component.loader';
+  let { intro, items } = $props();
+  const Intro = resolveComponent(intro);
 </script>
 
 <div class="min-h-[60vh]">
   <div class="px-7 pt-20 pb-8">
-    <Intro {body} />
+    <Intro.component {...Intro.props} />
     <div class="mx-auto mt-12 flex max-w-[1064px] flex-wrap place-content-center gap-6">
       {#each items as item}
-        <Card {...item} />
+        {@const Item = resolveComponent(item)}
+        <Item.component {...Item.props} />
       {/each}
     </div>
   </div>

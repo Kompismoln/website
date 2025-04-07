@@ -1,3 +1,20 @@
+<script module>
+  import z from 'zod';
+  export const schema = z.object({
+    primer: z.string(),
+    body: z.string(),
+    buttons: z
+      .array(
+        z.object({
+          text: z.string(),
+          url: z.string(),
+          primary: z.boolean().optional()
+        })
+      )
+      .optional()
+  });
+</script>
+
 <script lang="ts">
   import { marked } from 'marked';
   let { primer, body, buttons } = $props();

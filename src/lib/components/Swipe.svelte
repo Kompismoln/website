@@ -1,12 +1,13 @@
 <script>
-  import Card from '$lib/components/Card.svelte';
-  import Intro from '$lib/components/Intro.svelte';
   import { register } from 'swiper/element/bundle';
   import { onMount } from 'svelte';
+  import { resolveComponent } from '$lib/ssg/component.loader';
+
+  let { intro, slides } = $props();
+
+  const Intro = resolveComponent(intro);
 
   register();
-  let { body, slides } = $props();
-
   onMount(() => {
     const swiperEl = document.querySelector('swiper-container');
     const swiperParams = {
@@ -30,7 +31,7 @@
 
 <div class="min-h-[60vh]">
   <div class="pt-20 pb-8 md:px-7">
-    <Intro {body} />
+    <Intro.component {...Intro.props} />
     <div class="mx-auto mt-12 max-w-[1064px]">
       <swiper-container
         navigation="true"
@@ -40,8 +41,9 @@
         init="false"
       >
         {#each slides as slide}
+          {@const Slide = resolveComponent(slide)}
           <swiper-slide class="flex items-center justify-center">
-            <Card {...slide} />
+            <Slide.component {...Slide.props} />
           </swiper-slide>
         {/each}
       </swiper-container>
