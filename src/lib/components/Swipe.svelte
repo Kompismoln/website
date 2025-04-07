@@ -1,3 +1,13 @@
+<script module>
+  import z from 'zod';
+  import { z_component } from '$lib/ssg/schemas';
+
+  export const schema = z.object({
+    intro: z_component('Blurb'),
+    slides: z.array(z_component('Card'))
+  });
+</script>
+
 <script>
   import { register } from 'swiper/element/bundle';
   import { onMount } from 'svelte';

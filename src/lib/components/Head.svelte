@@ -1,3 +1,13 @@
+<script module>
+  import z from 'zod';
+  export const schema = z.object({
+    siteName: z.string(),
+    pageName: z.string(),
+    siteUrl: z.string(),
+    siteDescription: z.string()
+  });
+</script>
+
 <script lang="ts">
   let { siteName, pageName, siteUrl, siteDescription } = $props();
   const ldJson = {

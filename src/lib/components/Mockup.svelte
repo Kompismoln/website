@@ -1,3 +1,15 @@
+<script module>
+  import z from 'zod';
+  export const schema = z.object({
+    src: z.string(),
+    blank: z.boolean().optional(),
+    image: z.object({
+      src: z.string(),
+      alt: z.string()
+    })
+  });
+</script>
+
 <script lang="ts">
   let { src, blank, image } = $props();
 </script>

@@ -11,7 +11,7 @@
           primary: z.boolean().optional()
         })
       )
-      .optional()
+      .max(2)
   });
 </script>
 

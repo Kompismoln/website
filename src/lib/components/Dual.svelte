@@ -21,7 +21,13 @@
   <div class="hero-content px-4 pt-4 pb-16 text-center">
     <div class="max-w-lg">
       <div
-        class="from-primary to-accent mt-4 bg-linear-to-r bg-clip-text pb-2 text-3xl font-bold text-transparent md:text-5xl"
+        class="
+        mt-4
+        pb-2
+        text-3xl
+        font-bold
+        md:text-5xl
+        "
       >
         {title}
       </div>

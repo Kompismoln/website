@@ -1,3 +1,22 @@
+<script module>
+  import z from 'zod';
+  export const schema = z.object({
+    logo: z.object({
+      src: z.string(),
+      alt: z.string()
+    }),
+    searchPage: z.string().optional(),
+    menu: z
+      .array(
+        z.object({
+          href: z.string(),
+          text: z.string()
+        })
+      )
+      .max(4)
+  });
+</script>
+
 <script lang="ts">
   let { logo, searchPage, menu } = $props();
 </script>
