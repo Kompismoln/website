@@ -1,10 +1,10 @@
 <script module>
   import z from 'zod';
-  import { z_component } from '$lib/ssg/schemas';
+  import ze from '$lib/ssg/schemas';
 
   export const schema = z.object({
-    intro: z_component('Blurb'),
-    items: z.array(z_component('Card'))
+    intro: ze.component('Blurb'),
+    items: z.array(ze.component('Card'))
   });
 </script>
 

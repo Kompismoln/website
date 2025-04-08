@@ -1,20 +1,21 @@
 <script module>
   import z from 'zod';
-  import { z_component } from '$lib/ssg/schemas';
+  import ze from '$lib/ssg/schemas';
+
+  const allowedComponents = ['Card', 'Mockup', 'Preview'] as const;
 
   export const schema = z.object({
     title: z.string(),
-    slotA: z_component('Card', 'Mockup', 'Preview'),
-    slotB: z_component('Card', 'Mockup', 'Preview')
+    slots: z.array(ze.component(...allowedComponents)).length(2)
   });
 </script>
 
 <script lang="ts">
   import { resolveComponent } from '$lib/ssg/component.loader';
-  let { title, slotA, slotB } = $props();
+  let { title, slots } = $props();
 
-  const SlotA = resolveComponent(slotA);
-  const SlotB = resolveComponent(slotB);
+  const SlotA = resolveComponent(slots[0]);
+  const SlotB = resolveComponent(slots[1]);
 </script>
 
 <div class="hero mt-12 min-h-[60vh]">

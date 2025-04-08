@@ -13,7 +13,10 @@ export const loadPageContent = async (searchPath: string) => {
     try {
       return await parseFile(filePath);
     } catch (error: any) {
-      continue;
+      if (['ENOENT', 'ERR_MODULE_NOT_FOUND'].includes(error.code)) {
+        continue;
+      }
+      throw error;
     }
   }
 };

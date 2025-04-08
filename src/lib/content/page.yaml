@@ -33,7 +33,7 @@ components:
           src: https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/couch.svg
           alt: couch
         link:
-          src: 'https://example.com'
+          url: 'https://example.com'
           text: 'Docs'
           blank: true
 
@@ -53,32 +53,33 @@ components:
           src: https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/couch.svg
           alt: couch
         link:
-          src: 'https://example.com'
+          url: 'https://example.com'
           text: 'Docs'
           blank: true
 
   - component: Dual
     title: See it in action
-    slotA:
-      component: Mockup
-      src: https://example.com
-      blank: true
-      image:
-        src: https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/couch.svg
-        alt: couch
-    slotB:
-      component: Preview
-      body: |
-        SaaS Starter was created by **Critical Moments**:
-        a SDK to to help mobile apps
-        _increase conversion rates and app-ratings._
+    slots:
+      - component: Mockup
+        link:
+          text: example.com
+          url: https://example.com
+          blank: true
+        image:
+          src: https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/couch.svg
+          alt: couch
+      - component: Preview
+        body: |
+          SaaS Starter was created by **Critical Moments**:
+          a SDK to to help mobile apps
+          _increase conversion rates and app-ratings._
 
-        Our [website](https://example.com "title") is
-        the best example of SaaS Starter with style
-        and real content.
-      button:
-        text: See it in action
-        url: https://example.com
+          Our [website](https://example.com "title") is
+          the best example of SaaS Starter with style
+          and real content.
+        button:
+          text: See it in action
+          url: https://example.com
 
   - component: Trio
     screenshot: images/nextcloud-screenshot.png

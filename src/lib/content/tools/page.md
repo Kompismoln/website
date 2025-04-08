@@ -1,4 +1,5 @@
 ---
+title: Om oss
 components:
   - component: Hero
     primer: 'kompismoln.se/tools'

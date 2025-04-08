@@ -1,19 +1,12 @@
 <script module>
   import z from 'zod';
+  import ze from '$lib/ssg/schemas';
+
   export const schema = z.object({
     title: z.string(),
     description: z.string(),
-    image: z.object({
-      src: z.string(),
-      alt: z.string()
-    }),
-    link: z
-      .object({
-        src: z.string(),
-        text: z.string(),
-        blank: z.boolean().optional()
-      })
-      .optional()
+    image: ze.image,
+    link: ze.link.optional()
   });
 </script>
 
@@ -33,7 +26,7 @@
       {description}
     </p>
     {#if link}
-      <a href={link.src} class="pb-12" target={link.blank ? '_blank' : ''}>
+      <a href={link.url} class="pb-12" target={link.blank ? '_blank' : ''}>
         <button class="btn btn-outline btn-primary min-w-[100px]">{link.text}</button>
       </a>
     {/if}

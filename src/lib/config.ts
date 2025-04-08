@@ -11,18 +11,18 @@ export default {
   componentRoot: 'src/lib/components',
   searchPage: false,
   menu: [
-    { text: 'Blogg', href: '/blog' },
-    { text: 'Logga in', href: 'https://nc.kompismoln.se' }
+    { text: 'Blogg', url: '/blog' },
+    { text: 'Logga in', url: 'https://nc.kompismoln.se' }
   ],
   license:
     'Copyright © 2025 kompismoln. Concept copyrighted but code & design is free to use (MIT)',
   socials: [
-    { platform: 'twitter', src: 'http://example.com' },
-    { platform: 'instagram', src: 'http://example.com' },
-    { platform: 'youtube', src: 'http://example.com' },
-    { platform: 'facebook', src: 'http://example.com' },
-    { platform: 'bluesky', src: 'http://example.com' },
-    { platform: 'tiktok', src: 'http://example.com' },
-    { platform: 'mastodon', src: 'http://example.com' }
+    { platform: 'twitter', url: 'http://example.com' },
+    { platform: 'instagram', url: 'http://example.com' },
+    { platform: 'youtube', url: 'http://example.com' },
+    { platform: 'facebook', url: 'http://example.com' },
+    { platform: 'bluesky', url: 'http://example.com' },
+    { platform: 'tiktok', url: 'http://example.com' },
+    { platform: 'mastodon', url: 'http://example.com' }
   ]
 };

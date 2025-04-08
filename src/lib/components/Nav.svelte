@@ -1,19 +1,11 @@
 <script module>
   import z from 'zod';
+  import ze from '$lib/ssg/schemas';
+
   export const schema = z.object({
-    logo: z.object({
-      src: z.string(),
-      alt: z.string()
-    }),
-    searchPage: z.string().optional(),
-    menu: z
-      .array(
-        z.object({
-          href: z.string(),
-          text: z.string()
-        })
-      )
-      .max(4)
+    logo: ze.image,
+    searchPage: z.union([z.boolean(), z.string()]),
+    menu: z.array(ze.link).max(4)
   });
 </script>
 
@@ -62,7 +54,7 @@
   <div class="navbar-end">
     <ul class="menu menu-horizontal hidden text-lg font-bold sm:flex">
       {#each menu as item}
-        <li class="md:mx-2"><a href={item.href}>{item.text}</a></li>
+        <li class="md:mx-2"><a href={item.url}>{item.text}</a></li>
       {/each}
       {#if searchPage}
         <li class="md:mx-0">
@@ -101,7 +93,7 @@
         class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 font-bold shadow-sm"
       >
         {#each menu as item}
-          <li class="md:mx-2"><a href={item.href}>{item.text}</a></li>
+          <li class="md:mx-2"><a href={item.url}>{item.text}</a></li>
         {/each}
       </ul>
     </div>

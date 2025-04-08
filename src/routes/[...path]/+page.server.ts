@@ -7,4 +7,4 @@ export const load: PageServerLoad = async ({ params }) => {
   return content ?? error(404, params.path);
 };
 
-export const entries = async () => loadEntries('path');
+export const entries = async () => loadEntries();

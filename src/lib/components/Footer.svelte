@@ -1,19 +1,11 @@
 <script module>
   import z from 'zod';
+  import ze from '$lib/ssg/schemas';
+
   export const schema = z.object({
-    logo: z.object({
-      src: z.string(),
-      alt: z.string()
-    }),
+    logo: ze.image,
     license: z.string(),
-    socials: z
-      .array(
-        z.object({
-          src: z.string(),
-          platform: z.string()
-        })
-      )
-      .max(7)
+    socials: z.array(ze.social).max(7)
   });
 </script>
 

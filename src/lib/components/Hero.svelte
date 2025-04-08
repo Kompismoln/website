@@ -1,17 +1,11 @@
 <script module>
   import z from 'zod';
+  import ze from '$lib/ssg/schemas';
+
   export const schema = z.object({
     primer: z.string(),
     body: z.string(),
-    buttons: z
-      .array(
-        z.object({
-          text: z.string(),
-          url: z.string(),
-          primary: z.boolean().optional()
-        })
-      )
-      .max(2)
+    buttons: z.array(ze.button).max(2)
   });
 </script>
 

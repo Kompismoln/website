@@ -1,11 +1,10 @@
 <script module>
   import z from 'zod';
+  import ze from '$lib/ssg/schemas';
+
   export const schema = z.object({
     body: z.string(),
-    button: z.object({
-      url: z.string(),
-      text: z.string()
-    })
+    button: ze.button
   });
 </script>
 

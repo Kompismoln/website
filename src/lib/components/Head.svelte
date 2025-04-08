@@ -2,7 +2,7 @@
   import z from 'zod';
   export const schema = z.object({
     siteName: z.string(),
-    pageName: z.string(),
+    pageName: z.string().optional(),
     siteUrl: z.string(),
     siteDescription: z.string()
   });
