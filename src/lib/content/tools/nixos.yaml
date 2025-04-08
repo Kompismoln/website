@@ -1,4 +1,4 @@
-title: Om oss
+title: NixOS
 components:
   - component: Hero
     primer: 'kompismoln.se/tools/nixos'

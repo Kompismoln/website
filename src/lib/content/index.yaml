@@ -1,9 +1,9 @@
 title: Hem
 components:
   - component: Hero
-    primer: 'kompismoln.se'
+    primer: 'Hosting - Utveckling - Rådgivning'
     body: |
-      # NixOS-baserad infrastruktur _till er tjänst_
+      # NixOS-baserad infrastruktur till _er tjänst!_
       En molnbyrå som hjälper människor och företag att
       förverkliga idéer och hantera sin IT-miljö.
       Vi erbjuder konsulttjänster samt ett lokaldrivet
@@ -21,9 +21,34 @@ components:
     intro:
       component: Blurb
       body: |
-        # Är din idé vårat nästa projekt?
-        Just nu söker vi ett nytt uppdrag inom något av _dessa områden_:
+        ## Sånt pågår just nu
     slides:
+      - component: Card
+        title: 'Free to host'
+        description: >
+          Instructions included for Cloudflare+Supabase.
+          Free to start, and cost effective to scale.
+        image:
+          src: https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/couch.svg
+          alt: couch
+        link:
+          url: 'https://example.com'
+          text: 'Docs'
+          blank: true
+
+      - component: Card
+        title: 'Free to host'
+        description: >
+          Instructions included for Cloudflare+Supabase.
+          Free to start, and cost effective to scale.
+        image:
+          src: https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/couch.svg
+          alt: couch
+        link:
+          url: 'https://example.com'
+          text: 'Docs'
+          blank: true
+
       - component: Card
         title: 'Free to host'
         description: >
@@ -41,7 +66,7 @@ components:
     intro:
       component: Blurb
       body: |
-        # Är din idé vårat nästa projekt?
+        ## Är din idé vårat nästa projekt?
         Just nu söker vi ett nytt uppdrag inom något av _dessa områden_:
     items:
       - component: Card
@@ -80,6 +105,3 @@ components:
         button:
           text: See it in action
           url: https://example.com
-
-  - component: Trio
-    screenshot: images/nextcloud-screenshot.png

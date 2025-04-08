@@ -1,6 +1,6 @@
 <script module>
   import z from 'zod';
-  import ze from '$lib/ssg/schemas';
+  import ze from '$lib/zod-extensions';
 
   export const schema = z.object({
     logo: ze.image,
@@ -10,7 +10,19 @@
 </script>
 
 <script lang="ts">
+  import { browser } from '$app/environment';
+
   let { logo, searchPage, menu } = $props();
+  let altTheme = $state(false);
+
+  if (browser) {
+    altTheme = localStorage.getItem('altTheme') === '1';
+  }
+
+  const toggleTheme = (event: Event) => {
+    const altThemeString = (event.target as HTMLInputElement).checked ? '1' : '0';
+    localStorage.setItem('altTheme', altThemeString);
+  };
 </script>
 
 <div class="navbar bg-neutral text-neutral-content px-6">
@@ -32,7 +44,13 @@
       >
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
       </svg>
-      <input type="checkbox" value="light" class="toggle theme-controller" />
+      <input
+        type="checkbox"
+        value="light"
+        onchange={toggleTheme}
+        checked={altTheme}
+        class="toggle theme-controller"
+      />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"

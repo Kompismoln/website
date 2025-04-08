@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import path from 'node:path';
-import config from './src/lib/config';
+import ssgConfig from './src/lib/ssg/config';
 
 export default defineConfig({
   server: {
@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [tailwindcss(), sveltekit()],
   resolve: {
     alias: {
-      $components: path.resolve(__dirname, `./${config.componentRoot}`)
+      $components: path.resolve(__dirname, `./${ssgConfig.componentRoot}`)
     }
   }
 });

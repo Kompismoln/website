@@ -1,5 +1,5 @@
 ---
-title: Om oss
+title: Våra verktyg
 components:
   - component: Hero
     primer: 'kompismoln.se/tools'

@@ -1,6 +1,6 @@
 <script module>
   import z from 'zod';
-  import ze from '$lib/ssg/schemas';
+  import ze from '$lib/zod-extensions';
 
   export const schema = z.object({
     intro: ze.component('Blurb'),
@@ -8,7 +8,7 @@
   });
 </script>
 
-<script>
+<script lang="ts">
   import { register } from 'swiper/element/bundle';
   import { onMount } from 'svelte';
   import { resolveComponent } from '$lib/ssg/component.loader';

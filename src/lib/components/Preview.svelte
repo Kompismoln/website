@@ -1,6 +1,6 @@
 <script module>
   import z from 'zod';
-  import ze from '$lib/ssg/schemas';
+  import ze from '$lib/zod-extensions';
 
   export const schema = z.object({
     body: z.string(),

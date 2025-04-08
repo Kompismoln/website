@@ -1,5 +1,6 @@
 <script module>
   import z from 'zod';
+
   export const schema = z.object({
     body: z.string()
   });
@@ -10,18 +11,19 @@
   let { body } = $props();
 </script>
 
-<div class="mx-auto max-w-lg text-center">
+<div class="mx-auto text-center">
   <div class="markdown-content">
     {@html marked(body)}
   </div>
 </div>
 
 <style lang="postcss">
-  .markdown-content :global h1 {
+  .markdown-content :global h2 {
     @reference "tailwindcss";
     @apply pb-2 text-3xl font-bold md:text-5xl;
+    color: var(--color-accent);
   }
-  .markdown-content :global h1 em {
+  .markdown-content :global h2 em {
     @reference "tailwindcss";
     @apply underline decoration-4 md:decoration-[6px];
     text-decoration-color: var(--color-secondary);

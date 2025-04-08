@@ -1,6 +1,6 @@
 <script module>
   import z from 'zod';
-  import ze from '$lib/ssg/schemas';
+  import ze from '$lib/zod-extensions';
 
   const allowedComponents = ['Card', 'Mockup', 'Preview'] as const;
 
@@ -12,10 +12,8 @@
 
 <script lang="ts">
   import { resolveComponent } from '$lib/ssg/component.loader';
-  let { title, slots } = $props();
 
-  const SlotA = resolveComponent(slots[0]);
-  const SlotB = resolveComponent(slots[1]);
+  let { title, slots } = $props();
 </script>
 
 <div class="hero mt-12 min-h-[60vh]">
@@ -23,18 +21,17 @@
     <div class="max-w-lg">
       <div
         class="
+        title
         mt-4
-        pb-2
-        text-3xl
-        font-bold
-        md:text-5xl
         "
       >
         {title}
       </div>
       <div class="mt-6 flex flex-col place-content-center content-center gap-6 lg:flex-row">
-        <SlotA.component {...SlotA.props} />
-        <SlotB.component {...SlotB.props} />
+        {#each slots as slot}
+          {@const Slot = resolveComponent(slot)}
+          <Slot.component {...Slot.props} />
+        {/each}
       </div>
     </div>
   </div>

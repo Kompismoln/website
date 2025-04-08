@@ -7,8 +7,6 @@ export default {
     src: '/images/kompismoln-logo.svg',
     alt: 'kompismoln-logo'
   },
-  contentRoot: 'src/lib/content',
-  componentRoot: 'src/lib/components',
   searchPage: false,
   menu: [
     { text: 'Blogg', url: '/blog' },

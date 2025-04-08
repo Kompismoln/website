@@ -1,5 +1,6 @@
 import z from 'zod';
 
+/* Reusable schema chunks for component schemas */
 const ze = {
   component: (...cs: [string, ...string[]]) =>
     z

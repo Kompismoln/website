@@ -9,7 +9,8 @@
     resolveComponent({
       component: 'Head',
       siteName: config.siteName,
-      pageName: page.data.title,
+      pageName: page.data.title, // $derived preserves reactivity here
+      pagePath: page.url.pathname, // and here
       siteUrl: config.siteUrl,
       siteDescription: config.siteDescription
     })
@@ -33,11 +34,10 @@
 </script>
 
 <Head.component {...Head.props} />
-
 <Nav.component {...Nav.props} />
 
-<div class="">
+<main>
   {@render children()}
-</div>
+</main>
 
 <Footer.component {...Footer.props} />

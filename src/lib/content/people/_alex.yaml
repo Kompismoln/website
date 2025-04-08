@@ -1,0 +1,7 @@
+component: Author
+name: Alexander Holmbäck
+image:
+  src: /images/people/alex.jpg
+  alt: Author
+bio: |
+  43 år, bor i stockholm, bygger [kompismoln](https://kompismoln.se) och hjälper folk att använda internet.
