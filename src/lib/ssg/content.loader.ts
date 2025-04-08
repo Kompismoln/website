@@ -1,53 +1,53 @@
 import fs from 'node:fs/promises';
-import { globSync, existsSync } from 'node:fs';
+import { globSync } from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import config from '$lib/config';
 
-const filetypes = ['js', 'ts', 'json', 'yaml', 'md'];
+const filetypes = ['js', 'ts', 'json', 'yaml', 'yml', 'md'];
 
 export const loadPageContent = async (searchPath: string) => {
-  const filePath = path.join(config.contentRoot, searchPath, 'page');
-  const fileContent = await parseFile(filePath);
-  return fileContent;
+  for (const ext of filetypes) {
+    const filePath = path.join(config.contentRoot, searchPath, `page.${ext}`);
+    try {
+      return await parseFile(filePath);
+    } catch (error: any) {
+      continue;
+    }
+  }
 };
 
-export const loadEntries = async (key: string) => {
+export const loadEntries = async () => {
   const pattern = path.join(config.contentRoot, '**', `page.@(${filetypes.join('|')})`);
 
   const entries = globSync(pattern).map((file) => {
     const p = path.dirname(path.relative(config.contentRoot, file));
     console.log(`adding entry '${p}'`);
-    return { [key]: p === '.' ? '' : p };
+    return { path: p === '.' ? '' : p };
   });
 
   return entries;
 };
 
 const parseFile = async (filePath: string) => {
-  const fileExt = filetypes.find((ext) => existsSync(`${filePath}.${ext}`));
+  const fileExt = path.extname(filePath);
 
-  if (!fileExt) {
-    return;
-  }
-
-  filePath = `${filePath}.${fileExt}`;
-
-  if (['js', 'ts'].includes(fileExt)) {
-    return (await import(/* @vite-ignore */ filePath)).default;
+  if (['.js', '.ts'].includes(fileExt)) {
+    const filePathCacheBust = `<span class="math-inline">\{filePath\}?t\=</span>{Date.now()}`;
+    return (await import(/* @vite-ignore */ filePathCacheBust)).default;
   }
 
   const fileContent = await fs.readFile(filePath, 'utf-8');
 
-  if (fileExt === 'md') {
+  if (fileExt === '.md') {
     const { data, content: body } = matter(fileContent);
     return { ...data, body };
   }
-  if (fileExt === 'yaml') {
+  if (['.yml', '.yaml'].includes(fileExt)) {
     return yaml.load(fileContent);
   }
-  if (fileExt === 'json') {
+  if (fileExt === '.json') {
     return JSON.parse(fileContent);
   }
 };
