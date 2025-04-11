@@ -19,4 +19,3 @@
 <h1>{title}</h1>
 {@html marked(body)}
 <TC.component {...TC.props} />
-

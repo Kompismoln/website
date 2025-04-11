@@ -8,6 +8,9 @@ export default {
     alt: 'kompismoln-logo'
   },
   searchPage: false,
+  markdown: {
+    blank: /^(http|https|ftp|mailto|tel|file|data|ws|wss|irc|git):/i
+  },
   menu: [
     { text: 'Blogg', url: '/blog' },
     { text: 'Logga in', url: 'https://nc.kompismoln.se' }

@@ -2,11 +2,9 @@
   import z from 'zod';
   import ze from '$lib/zod-extensions';
 
-  const allowedComponents = ['Card', 'Mockup', 'Preview'] as const;
-
   export const schema = z.object({
     title: z.string(),
-    slots: z.array(ze.component(...allowedComponents)).length(2)
+    slots: z.array(ze.component(...['Card', 'Mockup', 'Preview'])).length(2)
   });
 </script>
 

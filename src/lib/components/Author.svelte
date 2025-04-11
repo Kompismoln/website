@@ -5,7 +5,7 @@
   export const schema = z.object({
     name: z.string(),
     bio: z.string(),
-    image: ze.image,
+    image: ze.image
   });
 </script>
 
@@ -15,11 +15,7 @@
 </script>
 
 <div class="flex-shrink-0">
-  <img
-    src="{image.src}"
-    alt="{image.alt}"
-    class="h-12 w-12 rounded-full"
-  />
+  <img src={image.src} alt={image.alt} class="h-12 w-12 rounded-full" />
 </div>
 <div class="ml-4">
   <p class="text-primary dark:text-primary-dark font-semibold">{name}</p>

@@ -10,7 +10,6 @@
     dateString: z.string().optional(),
     author: ze.component('Author')
   });
-
 </script>
 
 <script lang="ts">
@@ -20,9 +19,6 @@
   let { title, h1, date, dateString, body, author } = $props();
 
   const { md, renderer } = createMarked();
-  renderer.heading = function ({ text, depth }) {
-    return `<h${depth} class="text-2xl font-semibold text-primary dark:text-primary-dark">${text}</h${depth}>`;
-  };
   renderer.image = function ({ href, title, text }) {
     return `
   <div class="my-6">
