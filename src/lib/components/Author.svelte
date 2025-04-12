@@ -18,6 +18,6 @@
   <img src={image.src} alt={image.alt} class="h-12 w-12 rounded-full" />
 </div>
 <div class="ml-4">
-  <p class="text-primary dark:text-primary-dark font-semibold">{name}</p>
-  <span class="text-accent dark:text-accent-dark text-sm">{@html marked(bio)}</span>
+  <p class="text-primary font-semibold">{name}</p>
+  <span class="text-accent text-sm">{@html marked(bio)}</span>
 </div>

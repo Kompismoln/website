@@ -1,3 +1,4 @@
+import Inspect from 'vite-plugin-inspect'
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
@@ -9,7 +10,7 @@ export default defineConfig({
     host: '0.0.0.0',
     allowedHosts: true
   },
-  plugins: [tailwindcss(), sveltekit()],
+  plugins: [Inspect(), tailwindcss(), sveltekit()],
   resolve: {
     alias: {
       $components: path.resolve(__dirname, `./${ssgConfig.componentRoot}`)

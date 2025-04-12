@@ -32,11 +32,11 @@
   dateString = dateString ?? date.toISOString().slice(0, 10);
 </script>
 
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto px-4 pb-8 pt-24">
   <article class="prose lg:prose-xl mx-auto">
     <header class="mb-8">
-      <h1 class="text-primary dark:text-primary-dark text-4xl font-bold">{h1 || title}</h1>
-      <p class="text-accent dark:text-accent-dark text-sm">
+      <h1 class="text-primary text-4xl font-bold">{h1 || title}</h1>
+      <p class="text-accent text-sm">
         Skriven <time datetime={date}>{dateString}</time>
       </p>
     </header>

@@ -7,16 +7,16 @@ dateString: April 10, 2025
 _author: people/_alex.yaml
 ---
 
-Jag vet att det är fånigt att börja alla nya grejer med en hello world, men vad ska man göra?
+Ja jag vet att det är fånigt att börja alla nya grejer med en hello world, men vad ska man göra?
 Det är ju det man vill säga.
 
 ![Hello World](/images/hello-world.jpg 'Hello World')
 
-Nu måste jag kolla hur all formatering ser ut, så här kommer en saga.
+Nu ska vi se hur alla olika element ser ut, här kommer en saga.
 
-## Myran som älskade sin stack
+# Myran som älskade sin stack
 
-Det var en gång en myra som **älskade** :heart: sin _stack_. Myran tänkte på stacken dag
+Det var en gång en myra som **älskade** :heart: sin stack. Myran tänkte på stacken dag
 och natt och fantiserade hela tiden om saker som skulle vara bra för stacken.
 Om myran fick göra en lista på allt det som är betydelsefullt i livet skulle den se ut såhär:
 
@@ -29,7 +29,7 @@ Varje morgon gick myran ut i skogen för att leta efter fina saker att ta hem, s
 - Bladlöss
 - Jordkorn
 
-### Hört i skogen
+## Hört i skogen
 
 > Vad vore livet utan barr?
 
@@ -43,13 +43,14 @@ _- En annan myra_
 
 ---
 
-> Nonsens
+> Nonsens.
 
 _- En myra långt bort_
 
 ---
 
-### En dag som alla andra, tills...
+## En dag som alla andra, tills...
+😂
 
 En strålande dag precis som alla andra gick myran sin vanliga stig ut i skogen, först ut och sen
 höger och sen vänster, vänster, höger, vänster, höger. Sen kommer en död kråka där alla måste stanna
@@ -71,8 +72,8 @@ Jaså? sa myran. Då går vi då.
 Myran greppade bladlusen, lyfte upp den och började gå tillbaka.
 
 > [!INFO]
-> Visste ni att myror håller bladlöss som boskap och dricker deras mjölk,
-> precis som vi gör med kossor? [^1]
+> Visste du att myror håller bladlöss som boskap och dricker deras mjölk?
+> precis som vi gör med kossor! [^1]
 
 [^1]: Det finns en wikipedia-artikel i ämnet (öppnas i ny flik) [Wikipedia-artikel om bladlöss](https://en.wikipedia.org/wiki/Agriculture_in_ants)
 
@@ -81,6 +82,11 @@ Myran greppade bladlusen, lyfte upp den och började gå tillbaka.
 ```
 sudo echo "stack"
 ```
+Definition lists
+: are
+
+Also Definition
+: working
 
 | Syntax    | Description |
 | --------- | ----------- |
@@ -88,6 +94,8 @@ sudo echo "stack"
 | Paragraph | Text        |
 
 ~~The world is flat.~~
+
++[test](test-arg)
 
 - [x] Write the press release
 - [ ] Update the website
