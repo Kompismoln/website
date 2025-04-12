@@ -1,4 +1,8 @@
-component: Author2
+component: Author
+name: Mr Test
+image:
+  src: /images/people/alex.jpg
+  alt: Author
 bio: |
   SaaS Starter was created by **Critical Moments**:
   a SDK to to help mobile apps

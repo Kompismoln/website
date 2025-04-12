@@ -5,6 +5,12 @@ component: Blog/Post
 date: 2025-04-10
 dateString: April 10, 2025
 _author: people/_alex.yaml
+slots:
+  alert-with-dragon:
+    component: Alert
+    color: success
+    icon: fa-dragon
+    text: Allt gick bra
 ---
 
 Ja jag vet att det är fånigt att börja alla nya grejer med en hello world, men vad ska man göra?
@@ -14,10 +20,10 @@ Det är ju det man vill säga.
 
 Nu ska vi se hur alla olika element ser ut, här kommer en saga.
 
-# Myran som älskade sin stack
+# Myran som älskade sin stack {#custom-id}
 
 Det var en gång en myra som **älskade** :heart: sin stack. Myran tänkte på stacken dag
-och natt och fantiserade hela tiden om saker som skulle vara bra för stacken.
+som natt och fantiserade hela tiden om saker som skulle vara bra för stacken.
 Om myran fick göra en lista på allt det som är betydelsefullt i livet skulle den se ut såhär:
 
 1. Stacken
@@ -50,6 +56,7 @@ _- En myra långt bort_
 ---
 
 ## En dag som alla andra, tills...
+
 😂
 
 En strålande dag precis som alla andra gick myran sin vanliga stig ut i skogen, först ut och sen
@@ -71,6 +78,12 @@ Jaså? sa myran. Då går vi då.
 
 Myran greppade bladlusen, lyfte upp den och började gå tillbaka.
 
+:::slot{#alert-with-dragon}
+Notis: Allt gick bra
+:::
+
+[Hello](#custom-id)
+
 > [!INFO]
 > Visste du att myror håller bladlöss som boskap och dricker deras mjölk?
 > precis som vi gör med kossor! [^1]
@@ -82,6 +95,11 @@ Myran greppade bladlusen, lyfte upp den och började gå tillbaka.
 ```
 sudo echo "stack"
 ```
+
+## tango
+
+asdf
+
 Definition lists
 : are
 
@@ -94,8 +112,6 @@ Also Definition
 | Paragraph | Text        |
 
 ~~The world is flat.~~
-
-+[test](test-arg)
 
 - [x] Write the press release
 - [ ] Update the website

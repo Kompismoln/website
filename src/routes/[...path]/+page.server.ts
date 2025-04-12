@@ -1,5 +1,7 @@
 import type { PageServerLoad } from './$types';
-import { loadPageContent, loadEntries } from '$lib/ssg/content.loader';
+import { loadPageContent, discoverContentPaths } from 'compis/content.loader';
 
-export const load: PageServerLoad = ({ params }) => loadPageContent(params.path);
-export const entries = () => loadEntries().map((path) => ({ path }));
+export const load: PageServerLoad = ({ params }) =>
+  loadPageContent(params.path);
+
+export const entries = () => discoverContentPaths().map((path) => ({ path }));

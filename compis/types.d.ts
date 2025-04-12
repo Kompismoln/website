@@ -22,8 +22,18 @@ export type ComponentProps<T extends ComponentContent> = Omit<T, 'component'>;
  */
 export interface PageContent {
   title: string;
+  component?: string;
   components?: ComponentContent[];
+  [key: string]: unknown;
 }
+
+/* For content traversers
+ */
+export type ContentTraverser = (handle: {
+  obj: any;
+  filter: (val: any) => boolean;
+  callback: (val: any) => void | Promise<void>;
+}) => void | Promise<void>;
 
 /* A record of page content indexed by their site path.
  */
@@ -38,7 +48,9 @@ type ComponentModule = {
 export type ComponentMap = Record<string, ComponentModule>;
 
 /* A component module together with its props, ready to be rendered by svelte. */
-export interface ResolvedComponent<T extends ComponentContent = ComponentContent> {
+export interface ResolvedComponent<
+  T extends ComponentContent = ComponentContent
+> {
   component: ComponentType;
   props: ComponentProps<T>;
 }

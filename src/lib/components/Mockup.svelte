@@ -1,10 +1,10 @@
 <script module>
-  import z from 'zod';
-  import ze from '$lib/zod-extensions';
+  import { ze } from 'compis/schemas';
+  import s from '$lib/components/schemas';
 
-  export const schema = z.object({
-    link: ze.link,
-    image: ze.image
+  export const schema = ze.content({
+    link: s.link(),
+    image: s.image()
   });
 </script>
 

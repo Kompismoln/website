@@ -1,19 +1,18 @@
 <script module>
-  import z from 'zod';
+  import { ze } from 'compis/schemas';
 
-  export const schema = z.object({
-    body: z.string()
+  export const schema = ze.content({
+    body: ze.markdown()
   });
 </script>
 
 <script lang="ts">
-  import { marked } from 'marked';
   let { body } = $props();
 </script>
 
 <div class="mx-auto text-center">
   <div class="markdown-content">
-    {@html marked(body)}
+    {@html body.html}
   </div>
 </div>
 

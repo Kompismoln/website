@@ -1,7 +1,7 @@
 <script module>
-  import z from 'zod';
+  import { z, ze } from 'compis/schemas';
 
-  export const schema = z.object({
+  export const schema = ze.content({
     siteName: z.string(),
     pageName: z.string().optional(),
     pagePath: z.string(),

@@ -1,11 +1,11 @@
 <script module>
-  import z from 'zod';
-  import ze from '$lib/zod-extensions';
+  import { z, ze } from 'compis/schemas';
+  import s from '$lib/components/schemas';
 
-  export const schema = z.object({
-    logo: ze.image,
+  export const schema = ze.content({
+    logo: s.image(),
     license: z.string(),
-    socials: z.array(ze.social).max(7)
+    socials: z.array(s.social()).max(7)
   });
 </script>
 
@@ -13,7 +13,9 @@
   let { logo, license, socials } = $props();
 </script>
 
-<footer class="footer sm:footer-horizontal bg-neutral text-neutral-content items-center px-12 py-4">
+<footer
+  class="footer sm:footer-horizontal bg-neutral text-neutral-content items-center px-12 py-4"
+>
   <aside class="grid-flow-col items-center">
     <div class="chat chat-start">
       <div class="chat-image">
@@ -24,7 +26,9 @@
       <div class="chat-bubble max-w-96">{license}</div>
     </div>
   </aside>
-  <nav class="grid-flow-col gap-4 text-2xl md:place-self-center md:justify-self-end">
+  <nav
+    class="grid-flow-col gap-4 text-2xl md:place-self-center md:justify-self-end"
+  >
     {#each socials as social}
       <a href={social.src} aria-label={social.platform}>
         <i class="fa-brands fa-{social.platform}"></i>

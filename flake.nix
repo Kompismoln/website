@@ -2,7 +2,7 @@
   description = "build kompismoln.se";
 
   inputs = {
-    nixpkgs.url = "github:ahbk/nixpkgs/my-nixos";
+    nixpkgs.url = "github:kompismoln/nixpkgs/nixos-unstable";
   };
 
   outputs =
@@ -26,6 +26,10 @@
         default = pkgs.mkShell {
           name = "${name}-dev";
           packages = with pkgs; [
+            node2nix
+            nodejs_23
+            nodePackages.svelte-language-server
+            nodePackages.typescript-language-server
           ];
         };
       };

@@ -1,15 +1,14 @@
 <script module>
-  import z from 'zod';
-  import ze from '$lib/zod-extensions';
+  import { z, ze } from 'compis/schemas';
 
-  export const schema = z.object({
+  export const schema = ze.content({
     title: z.string(),
-    slots: z.array(ze.component(...['Card', 'Mockup', 'Preview'])).length(2)
+    slots: z.array(ze.component(['Card', 'Mockup', 'Preview'])).length(2)
   });
 </script>
 
 <script lang="ts">
-  import { resolveComponent } from '$lib/ssg/component.loader';
+  import { resolveComponent } from 'compis/component.loader';
 
   let { title, slots } = $props();
 </script>
@@ -25,7 +24,9 @@
       >
         {title}
       </div>
-      <div class="mt-6 flex flex-col place-content-center content-center gap-6 lg:flex-row">
+      <div
+        class="mt-6 flex flex-col place-content-center content-center gap-6 lg:flex-row"
+      >
         {#each slots as slot}
           {@const Slot = resolveComponent(slot)}
           <Slot.component {...Slot.props} />

@@ -1,16 +1,15 @@
 <script module>
-  import z from 'zod';
-  import ze from '$lib/zod-extensions';
+  import { z, ze } from 'compis/schemas';
+  import s from '$lib/components/schemas';
 
-  export const schema = z.object({
+  export const schema = ze.content({
     name: z.string(),
-    bio: z.string(),
-    image: ze.image
+    bio: ze.markdown(),
+    image: s.image()
   });
 </script>
 
 <script lang="ts">
-  import { marked } from 'marked';
   let { name, bio, image } = $props();
 </script>
 
@@ -19,5 +18,5 @@
 </div>
 <div class="ml-4">
   <p class="text-primary font-semibold">{name}</p>
-  <span class="text-accent text-sm">{@html marked(bio)}</span>
+  <span class="text-accent text-sm">{@html bio.html}</span>
 </div>

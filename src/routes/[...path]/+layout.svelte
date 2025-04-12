@@ -3,7 +3,7 @@
   import '../../app.css';
   import config from '$lib/config';
   import { page } from '$app/state';
-  import { resolveComponent } from '$lib/ssg/component.loader';
+  import { resolveComponent } from 'compis/component.loader';
 
   const Head = $derived(
     resolveComponent({

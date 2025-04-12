@@ -1,38 +1,31 @@
 <script module>
-  import z from 'zod';
-  import ze from '$lib/zod-extensions';
+  import { z, ze } from 'compis/schemas';
 
-  export const schema = z.object({
+  export const schema = ze.content({
     title: z.string(),
     h1: z.string().optional(),
-    body: z.string(),
+    body: ze.markdown(),
     date: z.date(),
     dateString: z.string().optional(),
-    author: ze.component('Author')
+    author: ze.component(['Author']),
+    slots: ze.slots().optional()
   });
 </script>
 
 <script lang="ts">
-  import { resolveComponent } from '$lib/ssg/component.loader';
-  import { createMarked } from '$lib/marked';
+  import { resolveComponent } from 'compis/component.loader';
+  import { mountSlots } from 'compis/hooks';
 
-  let { title, h1, date, dateString, body, author } = $props();
+  let { title, h1, date, dateString, body, author, slots } = $props();
 
-  const { md, renderer } = createMarked();
-  renderer.image = function ({ href, title, text }) {
-    return `
-  <div class="my-6">
-  <img src="${href}" alt="${text}" title="${title}" class="w-full rounded-lg shadow-lg">
-  </div>`;
-  };
-  md.use({ renderer });
+  mountSlots(slots);
 
   const Author = resolveComponent(author);
 
   dateString = dateString ?? date.toISOString().slice(0, 10);
 </script>
 
-<div class="container mx-auto px-4 pb-8 pt-24">
+<div class="container mx-auto px-4 pt-24 pb-8">
   <article class="prose lg:prose-xl mx-auto">
     <header class="mb-8">
       <h1 class="text-primary text-4xl font-bold">{h1 || title}</h1>
@@ -42,7 +35,7 @@
     </header>
 
     <section class="space-y-6">
-      {@html md.parse(body)}
+      {@html body.html}
     </section>
 
     <section class="mt-8 flex items-center border-t pt-6">

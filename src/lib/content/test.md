@@ -1,7 +1,6 @@
 ---
-title: test
 component: Test
-_testComponent: test/_author.yaml
+test: asdf
 ---
 
 # test

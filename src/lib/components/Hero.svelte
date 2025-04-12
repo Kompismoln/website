@@ -1,35 +1,39 @@
 <script module>
-  import z from 'zod';
-  import ze from '$lib/zod-extensions';
+  import { z, ze } from 'compis/schemas';
+  import s from '$lib/components/schemas';
 
-  export const schema = z.object({
+  export const schema = ze.content({
     primer: z.string(),
-    body: z.string(),
-    buttons: z.array(ze.button).max(2)
+    body: ze.markdown(),
+    buttons: z.array(s.button()).max(2)
   });
 </script>
 
 <script lang="ts">
-  import { marked } from 'marked';
   let { primer, body, buttons } = $props();
 </script>
 
 <div class="hero min-h-[60vh]">
   <div class="hero-content py-12 text-center">
     <div class="max-w-xl">
-      <div class="text-secondary mb-3 pb-1 text-xl font-bold md:mb-7 md:text-3xl">
+      <div
+        class="text-secondary mb-3 pb-1 text-xl font-bold md:mb-7 md:text-3xl"
+      >
         {primer}
       </div>
 
       <div class="markdown-content">
-        {@html marked(body)}
+        {@html body.html}
       </div>
       {#if buttons}
-        <div class="mt-6 flex flex-row flex-wrap place-content-center gap-4 md:mt-4">
+        <div
+          class="mt-6 flex flex-row flex-wrap place-content-center gap-4 md:mt-4"
+        >
           {#each buttons as button}
             <a href={button.url}>
-              <button class:btn-outline={!button.primary} class="btn btn-primary"
-                >{button.text}</button
+              <button
+                class:btn-outline={!button.primary}
+                class="btn btn-primary">{button.text}</button
               >
             </a>
           {/each}

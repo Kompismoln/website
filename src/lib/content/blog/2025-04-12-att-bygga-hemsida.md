@@ -11,4 +11,4 @@ Hemsidor har en underlig status i dagens mediesamhälle.
 Å ena sidan är bara ordet _hemsida_ något som för tankarna till 90-talet,
 å andra sidan är varje verksamhet med självrespekt _måste_ ha.
 Det går att komma långt med sociala medier, men internet är och har alltid varit
-Det Sociala Mediet, och 
+Det Sociala Mediet, och

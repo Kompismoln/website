@@ -11,6 +11,6 @@ describe('glob content', () => {
     const content = Object.fromEntries(
       files.map((file) => [path.dirname(path.relative(contentDir, file)), file])
     );
-    console.log(content);
+    console.debug(content);
   });
 });

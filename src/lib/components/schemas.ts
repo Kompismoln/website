@@ -1,28 +1,28 @@
+/* Reusable schema chunks for component schemas */
 import z from 'zod';
 
-/* Reusable schema chunks for component schemas */
-const ze = {
-  component: (...cs: [string, ...string[]]) =>
-    z
-      .object({
-        component: z.enum(cs)
-      })
-      .passthrough(),
-  image: z.object({
+const image = () =>
+  z.object({
     src: z.string(),
     alt: z.string()
-  }),
-  link: z.object({
+  });
+
+const link = () =>
+  z.object({
     url: z.string(),
     text: z.string(),
     blank: z.boolean().optional()
-  }),
-  button: z.object({
-    text: z.string(),
+  });
+
+const button = () =>
+  z.object({
     url: z.string(),
+    text: z.string(),
     primary: z.boolean().optional()
-  }),
-  social: z.object({
+  });
+
+const social = () =>
+  z.object({
     url: z.string(),
     platform: z.enum([
       'twitter',
@@ -33,7 +33,11 @@ const ze = {
       'bluesky',
       'tiktok'
     ])
-  })
-};
+  });
 
-export default ze;
+export default {
+  image,
+  link,
+  button,
+  social
+};

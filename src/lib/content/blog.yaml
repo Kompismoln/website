@@ -8,6 +8,6 @@ components:
       - text: 'Berätta mer'
         url: '/about'
         primary: true
-      - text: 'Vad är NixOS?'
+      - text: 'Vad är ?'
         url: '/tools/nixos'
         primary: false

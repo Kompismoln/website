@@ -1,17 +1,16 @@
 <script module>
-  import z from 'zod';
-  import ze from '$lib/zod-extensions';
+  import { z, ze } from 'compis/schemas';
 
-  export const schema = z.object({
-    intro: ze.component('Blurb'),
-    slides: z.array(ze.component('Card'))
+  export const schema = ze.content({
+    intro: ze.component(['Blurb']),
+    slides: z.array(ze.component(['Card']))
   });
 </script>
 
 <script lang="ts">
   import { register } from 'swiper/element/bundle';
   import { onMount } from 'svelte';
-  import { resolveComponent } from '$lib/ssg/component.loader';
+  import { resolveComponent } from 'compis/component.loader';
 
   let { intro, slides } = $props();
 

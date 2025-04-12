@@ -1,21 +1,14 @@
 <script module>
-  import z from 'zod';
-  import ze from '$lib/zod-extensions';
+  import { z, ze } from 'compis/schemas';
 
-  export const schema = z.object({
-    title: z.string(),
-    body: z.string(),
-    testComponent: ze.component('Author2', 'Preview')
+  export const schema = ze.content({
+    test: z.string(),
+    body: ze.markdown()
   });
 </script>
 
 <script>
-  import { marked } from 'marked';
-  import { resolveComponent } from '$lib/ssg/component.loader';
-  let { title, body, testComponent } = $props();
-  const TC = resolveComponent(testComponent);
+  let { test } = $props();
 </script>
 
-<h1>{title}</h1>
-{@html marked(body)}
-<TC.component {...TC.props} />
+<h1>{test}</h1>

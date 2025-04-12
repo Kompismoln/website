@@ -1,32 +1,22 @@
 <script module>
-  import z from 'zod';
-  import ze from '$lib/zod-extensions';
+  import { ze } from 'compis/schemas';
+  import s from '$lib/components/schemas';
 
-  export const schema = z.object({
-    body: z.string(),
-    button: ze.button
+  export const schema = ze.content({
+    body: ze.markdown(),
+    button: s.button()
   });
 </script>
 
 <script lang="ts">
-  import { Marked, Renderer } from 'marked';
   const { body, button } = $props();
-
-  const renderer = new Renderer();
-  renderer.link = function ({ href, title, text }) {
-    return `<a href="${href}" title="${title || ''}" class="link hover:link-primary">${text}</a>`;
-  };
-  renderer.em = function ({ text }) {
-    return `<em class="decoration-secondary">${text}</em>`;
-  };
-  const md = new Marked({ renderer });
 </script>
 
 <div class="mt-6 min-w-[270px] lg:mt-0 lg:min-w-[420px]">
   <div class="my-auto">
     <div class="px-4">
       <div class="markdown-content space-y-6">
-        {@html md.parse(body)}
+        {@html body.html}
       </div>
       <div class="mt-6 px-4 text-lg md:text-xl"></div>
       <div class="text-large mt-4">
