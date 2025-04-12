@@ -16,6 +16,7 @@ const componentMap = import.meta.glob('$components/**/*.svelte', {
 export const resolveComponent = (content: ComponentContent): ResolvedComponent => {
   const { component: name, ...props } = content;
   const path = `/${config.componentRoot}/${name}.svelte`;
+
   if (!(path in componentMap)) {
     throw new Error(`Component not found: ${name}`);
   }

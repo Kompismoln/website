@@ -1,3 +1,4 @@
+import type { PageContent, ComponentContent } from '$lib/ssg/types';
 import fs from 'node:fs/promises';
 import { globSync } from 'node:fs';
 import path from 'node:path';
@@ -18,11 +19,13 @@ export const loadPageContent = async (searchPath: string) => {
   // Rename site root to index file
   searchPath = searchPath === '' ? config.indexFile : searchPath;
 
+  let page: PageContent | ComponentContent | null = null; 
+
   for (const ext of filetypes) {
     const filePath = path.join(config.contentRoot, `${searchPath}.${ext}`);
     try {
-      const page = await parseFile(filePath);
-      return await resolveFragments(page);
+      page = await parseFile(filePath);
+      break;
     } catch (error: any) {
       /* Files/modules not found simply indicates that next filetype should be tried.
        * If no files exist in the path a 404 is the appropriate response.
@@ -34,7 +37,12 @@ export const loadPageContent = async (searchPath: string) => {
       throw error;
     }
   }
-  error(404, searchPath);
+
+  if (!page) {
+    error(404, searchPath);
+  }
+
+  return await resolveFragments(page);
 };
 
 /* Return a list of all paths in src/lib/content/ with an allowed filetype.
@@ -63,7 +71,7 @@ export const loadEntries = () => {
 /* Try to parse the suggested file path and return whats in it.
  * Should handle all `filetypes`
  */
-const parseFile = async (filePath: string) => {
+const parseFile = async (filePath: string): Promise<any> => {
   const fileExt = path.extname(filePath);
 
   if (['.js', '.ts'].includes(fileExt)) {

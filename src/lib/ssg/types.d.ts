@@ -1,6 +1,10 @@
 import type { ComponentType } from 'svelte';
 import type { ZodObject } from 'zod';
 
+export interface Fragment {
+  [key: string]: unknown;
+}
+
 /* The component string should be a path to a file in $components (src/lib/components/) without
  * leading slash. Everything else is props.
  */
@@ -18,7 +22,7 @@ export type ComponentProps<T extends ComponentContent> = Omit<T, 'component'>;
  */
 export interface PageContent {
   title: string;
-  components: ComponentContent[];
+  components?: ComponentContent[];
 }
 
 /* A record of page content indexed by their site path.
