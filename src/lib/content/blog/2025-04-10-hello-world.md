@@ -8,6 +8,8 @@ _author: people/_alex.yaml
 ---
 
 Jag vet att det är fånigt att börja alla nya grejer med en hello world, men vad ska man göra?
+Det är ju det man vill säga.
+
 ![Hello World](/images/hello-world.jpg 'Hello World')
 
 Nu måste jag kolla hur all formatering ser ut, så här kommer en saga.
@@ -17,7 +19,6 @@ Nu måste jag kolla hur all formatering ser ut, så här kommer en saga.
 Det var en gång en myra som **älskade** :heart: sin _stack_. Myran tänkte på stacken dag
 och natt och fantiserade hela tiden om saker som skulle vara bra för stacken.
 Om myran fick göra en lista på allt det som är betydelsefullt i livet skulle den se ut såhär:
-
 
 1. Stacken
 
@@ -49,9 +50,10 @@ _- En myra långt bort_
 ---
 
 ### En dag som alla andra, tills...
+
 En strålande dag precis som alla andra gick myran sin vanliga stig ut i skogen, först ut och sen
 höger och sen vänster, vänster, höger, vänster, höger. Sen kommer en död kråka där alla måste stanna
-till så att det blir kö, och sen vidare runt dammen och när vi kommit runt en stor sten är vi 
+till så att det blir kö, och sen vidare runt dammen och när vi kommit runt en stor sten är vi
 i princip utanför äventyrsradien.
 
 > [!WARNING]
@@ -70,8 +72,7 @@ Myran greppade bladlusen, lyfte upp den och började gå tillbaka.
 
 > [!INFO]
 > Visste ni att myror håller bladlöss som boskap och dricker deras mjölk,
-precis som vi gör med kossor? [^1]
-
+> precis som vi gör med kossor? [^1]
 
 [^1]: Det finns en wikipedia-artikel i ämnet (öppnas i ny flik) [Wikipedia-artikel om bladlöss](https://en.wikipedia.org/wiki/Agriculture_in_ants)
 
@@ -86,13 +87,23 @@ sudo echo "stack"
 | Header    | Title       |
 | Paragraph | Text        |
 
-
-
 ~~The world is flat.~~
 
 - [x] Write the press release
 - [ ] Update the website
 - [ ] Contact the media
+
+> [!DEFAULT]
+> Default
+
+> [!BASE100]
+> Base 100
+
+> [!BASE200]
+> Base 200
+
+> [!BASE300]
+> Base 300
 
 > [!PRIMARY]
 > Primary
@@ -103,6 +114,11 @@ sudo echo "stack"
 > [!ACCENT]
 > Accent
 
+> [!NEUTRAL]
+> Neutral
+
+> [!INFO]
+> Info
 
 > [!SUCCESS]
 > Success

@@ -19,7 +19,7 @@ export const loadPageContent = async (searchPath: string) => {
   // Rename site root to index file
   searchPath = searchPath === '' ? config.indexFile : searchPath;
 
-  let page: PageContent | ComponentContent | null = null; 
+  let page: PageContent | ComponentContent | null = null;
 
   for (const ext of filetypes) {
     const filePath = path.join(config.contentRoot, `${searchPath}.${ext}`);

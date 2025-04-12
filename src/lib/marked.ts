@@ -12,45 +12,28 @@ export const createMarked = () => {
       `<img alt="${token.name}" src="${token.emoji}" class="marked-emoji-img">`
   };
 
+  const variants = {
+    default: 'fa-tree',
+    base100: 'fa-seedling',
+    base200: 'fa-dragon',
+    base300: 'fa-cow',
+    primary: 'fa-leaf',
+    secondary: 'fa-wheat-awn',
+    accent: 'fa-bomb',
+    neutral: 'fa-leaf',
+    info: 'fa-cloud',
+    success: 'fa-rocket',
+    warning: 'fa-hippo',
+    error: 'fa-dumpster-fire'
+  };
+
   const alertOptions = {
     className: 'alert',
-      variants: [
-    {
-      type: 'primary',
-      icon: '<i class="text-3xl fa-solid fa-leaf"></i>',
-      title: '',
-    },
-    {
-      type: 'secondary',
-      icon: '<i class="text-3xl fa-solid fa-wheat-awn"></i>',
-      title: '',
-    },
-    {
-      type: 'accent',
-      icon: '<i class="text-3xl fa-solid fa-bomb"></i>',
-      title: '',
-    },
-    {
-      type: 'info',
-      icon: '<i class="text-3xl fa-solid fa-cloud"></i>',
-      title: '',
-    },
-    {
-      type: 'success',
-      icon: '<i class="text-3xl fa-solid fa-rocket"></i>',
-      title: '',
-    },
-    {
-      type: 'warning',
-      icon: '<i class="text-3xl fa-solid fa-hippo"></i>',
-      title: '',
-    },
-    {
-      type: 'error',
-      icon: '<i class="text-3xl fa-solid fa-dumpster-fire"></i>',
-      title: '',
-    },
-  ]
+    variants: Object.entries(variants).map(([type, icon]) => ({
+      type,
+      icon: `<i class="text-3xl fa-solid ${icon}"></i>`,
+      title: ''
+    }))
   };
 
   const renderer = new Renderer();
@@ -61,7 +44,7 @@ export const createMarked = () => {
     return `<em class="text-accent">${text}</em>`;
   };
   renderer.checkbox = function ({ checked }) {
-    return `<input class="checkbox checkbox-primary mr-2" ${checked ? "checked" : ""} type="checkbox" />`;
+    return `<input class="checkbox checkbox-primary mr-2" ${checked ? 'checked' : ''} type="checkbox" />`;
   };
   renderer.link = function ({ href, title, text }) {
     const target = config.markdown.blank.test(href) ? '_blank' : '_self';
