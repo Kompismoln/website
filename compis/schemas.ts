@@ -4,16 +4,31 @@ import type { ComponentContent, PreparedMarkdown, ParsedHtml } from './types';
 
 export { z };
 
-/* The parse function in $lib/markdown depends and remark, rehype and countless plugins,
- * we don't want that in our bundle.
- * Alternative method: set parse to (val) => ({ html: val, data: { raw: true} } })
- * in browser to let unparsed markdown through.
+/**
+ * Provides the following utility schemas:
+ *
+ * - content
+ *   Wrapper and a z.object type that allows a component property and parses
+ *   markdown fields.
+ *
+ * - component
+ *   An enumeration of component names that will be imported and
+ *   made available under the property name.
+ *
+ * - markdown
+ *   A z.string that is transformed to a PreparedMarkdown object.
+ *
+ * - slots
+ *   A z.array with components that should render on the client.
+ *
  */
-const processClient = (content: ComponentContent) => {
-  return content;
-};
 
-const processServer = async (content: ComponentContent) => {
+/* Callback for content's transform function
+ */
+const process = async (content: ComponentContent) => {
+  if (browser) {
+    return content;
+  }
   const parse = (await import('./markdown')).parse;
   const isPreparedMarkdown = (val: unknown): val is PreparedMarkdown => {
     return !!val && typeof val === 'object' && 'markdown' in val;
@@ -27,10 +42,14 @@ const processServer = async (content: ComponentContent) => {
   return Object.fromEntries(entries);
 };
 
+const content = (obj: any) => {
+  return z
+    .object({ ...obj, component: z.string() })
+    .strict()
+    .transform((val) => process(val as ComponentContent));
+};
+
 const markdown = (options = {}) => {
-  /* If markdown is string, mark it so it can be recognized by component-wide
-   * transform.
-   */
   const prepare = (val: string): PreparedMarkdown => ({
     markdown: val,
     options
@@ -53,14 +72,5 @@ const component = (allowed: string[] | null = null) => {
 };
 
 const slots = (allowed = null) => z.record(component(allowed));
-
-const content = (obj: any) => {
-  const process = browser ? processClient : processServer;
-
-  return z
-    .object({ ...obj, component: z.string() })
-    .strict()
-    .transform((val) => process(val as ComponentContent));
-};
 
 export const ze = { markdown, component, slots, content };

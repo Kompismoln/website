@@ -1,8 +1,8 @@
 import type { Root } from 'hast';
-import { classnames } from 'hast-util-classnames'; // Utility for managing classes
+import { classnames } from 'hast-util-classnames';
 import { visit } from 'unist-util-visit';
 
-export default function addLinkClass() {
+export default function daisyUI() {
   return (tree: Root) => {
     visit(tree, 'element', (node) => {
       if (node.tagName === 'input') {

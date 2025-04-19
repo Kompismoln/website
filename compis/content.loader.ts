@@ -13,36 +13,22 @@ import { contentTraverser } from './utils';
 
 const filetypes = ['js', 'ts', 'json', 'yaml', 'yml', 'md'];
 
-/* Find all valid paths in $lib/content and return them as an array
- * SvelteKit uses this on 'npm run build' to know what pages to build.
- */
-export const discoverContentPaths = () => {
-  const pattern = path.join(
-    config.contentRoot,
-    `**/*.@(${filetypes.join('|')})`
-  );
-
-  return (
-    globSync(pattern)
-      // Strip contentRoot and file extension so that the paths mirrors site paths
-      .map((file) => path.parse(path.relative(config.contentRoot, file)))
-      // Ignore fragment files
-      .filter(({ name }) => name?.[0] !== '_')
-      // Alias index file to the empty path (site root)
-      .map(({ dir, name }) => {
-        const p = path.join(dir, name);
-        const entry = p === config.indexFile ? '' : p;
-
-        console.info(`Adding entry: '${entry}'`);
-        return entry;
-      })
-  );
-};
-
-/* Try all filetypes in order, return content of first find.
- * `searchPath` is the path from svelte params in load()
- * Also parse fragments and validate components and convert markdown to html.
- * All other errors are thrown at the user ungracefully.
+/**
+ * The Page Content Loader.
+ *
+ * Takes a path, returns a server rendered page:
+ * - Infer a filePath from the searchPath
+ * - Find and parse the file
+ * - Resolve fragments
+ * - Validate and transform all components
+ * - Throw meaningful errors along the way
+ *
+ *
+ * Where 404?
+ * I'm not sure it's needed. This only runs on build and 404's obscured
+ * my stacktraces. They weren't even working on the client in build, probably
+ * because this function doesn't run there 🤔
+ *
  */
 export const loadPageContent = async (searchPath: string) => {
   // This redirect has no effect in production, handle redirects on webserver instead
@@ -65,19 +51,17 @@ export const loadPageContent = async (searchPath: string) => {
   return page;
 };
 
+/* Recurse in content tree and
+ * - Replace all fragments with data from file
+ * - Validate & transform all components
+ */
 export const processPage = async (page: PageContent): Promise<PageContent> => {
-  /*
-   * Recursively resolve all fragments
-   * (Content properties starting with underscore)
-   */
   page = await contentTraverser({
     obj: page,
     filter: (obj) => Object.keys(obj).some((key: string) => key[0] === '_'),
     callback: parseFragment
   });
 
-  /* Validate and parse markdown on all components
-   */
   page = await contentTraverser({
     obj: page,
     filter: (obj) => 'component' in obj,
@@ -87,8 +71,7 @@ export const processPage = async (page: PageContent): Promise<PageContent> => {
   return page;
 };
 
-/* Probe all extensions in content root for the given path.
- * Cache found pages? Maybe not necessary, sveltekit probably does that already.
+/* Probe all filetypes in content root for search path.
  */
 export const findPageContent = async (searchPath: string) => {
   for (const ext of filetypes) {
@@ -96,8 +79,6 @@ export const findPageContent = async (searchPath: string) => {
     try {
       return await parseFile(filePath);
     } catch (error: any) {
-      /* Files/modules not found simply indicates that next filetype should be tried.
-       */
       if (['ENOENT', 'ERR_MODULE_NOT_FOUND'].includes(error.code)) {
         continue;
       }
@@ -107,8 +88,7 @@ export const findPageContent = async (searchPath: string) => {
   throw new Error(`No file matched '${searchPath}.@(${filetypes.join('|')})'`);
 };
 
-/* Try to parse the suggested file path and return whats in it.
- * Should handle all `filetypes`
+/* Parse file path and return data.
  */
 export const parseFile = async (filePath: string): Promise<any> => {
   const fileExt = path.extname(filePath);
@@ -129,21 +109,27 @@ export const parseFile = async (filePath: string): Promise<any> => {
   if (fileExt === '.json') {
     return JSON.parse(fileContent);
   }
-  /* This will only happen if filePath has an unsupported filetype
+  /* Unusual: This will only happen if filePath has an unsupported filetype
    */
   throw new Error(`unsupported extension: '${fileExt}'.`);
 };
 
 /* Load the content of fragment file(s) and attach them to the content tree.
+ *
  * If the key is just an underscore, use fragment properties as default for
  * the object itself.
+ *
  * Otherwise, attach the fragment to the property with underscore removed.
- * Either way, delete the key for the fragment.
+ *
+ * In both cases, delete the reference (key with underscore).
+ *
+ * (Whoops this function relies on mutation, that will definitely cause
+ * trouble some day lol)
  */
 export const parseFragment = async (obj: any) => {
   const keys = Object.keys(obj);
 
-  if ('_' in keys) {
+  if (keys.includes('_')) {
     const fragment = await parseFile(path.join(config.contentRoot, obj._));
     delete obj._;
     Object.assign(obj, fragment);
@@ -153,12 +139,44 @@ export const parseFragment = async (obj: any) => {
 
   if (refs.length === 0) return obj;
 
-  for (const i in refs) {
-    const ref = refs[i];
+  for (const ref of refs) {
     const fragment = await parseFile(path.join(config.contentRoot, obj[ref]));
     delete obj[ref];
     obj[ref.slice(1)] = fragment;
   }
 
   return obj;
+};
+
+/* Discover entries for sveltekit
+ *
+ * Runs only on build.
+ *
+ * All valid filetypes in content root are searched.
+ * Any match is added as entry.
+ *
+ * SvelteKit will discover all non-orphan pages given the root page,
+ * so this function isn't always needed.
+ */
+export const discoverContentPaths = () => {
+  const pattern = path.join(
+    config.contentRoot,
+    `**/*.@(${filetypes.join('|')})`
+  );
+
+  return (
+    globSync(pattern)
+      // Strip contentRoot and file extension so that the paths mirrors site paths
+      .map((file) => path.parse(path.relative(config.contentRoot, file)))
+      // Ignore fragment files
+      .filter(({ name }) => name?.[0] !== '_')
+      // Alias index file to the empty path (site root)
+      .map(({ dir, name }) => {
+        const p = path.join(dir, name);
+        const entry = p === config.indexFile ? '' : p;
+
+        console.info(`Adding entry: '${entry}'`);
+        return entry;
+      })
+  );
 };

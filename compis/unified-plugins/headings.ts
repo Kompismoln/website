@@ -3,6 +3,11 @@ import type { Root, Heading } from 'mdast';
 import type { VFile } from 'vfile';
 import { toString } from 'mdast-util-to-string';
 
+/* Do heading stuff
+ * - Add id
+ * - Decrease depth
+ * - Store heading in data for TOC
+ */
 export default function parseHeadings() {
   return (tree: Root, file: VFile) => {
     const headings: any[] = [];

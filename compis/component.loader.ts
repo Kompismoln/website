@@ -5,43 +5,46 @@ import type {
   PageContent
 } from './types';
 
-import { contentTraverser } from './utils';
+import { contentTraverser, inferCommonPath, trimKey } from './utils';
 
-/* Import all svelte components in $components
- * Vite's glob import doesn't allow dynamic strings so we can't interpolate
- * component root here, hence the $components alias.
- * eager is true because it makes resolveComponent sync and easier to use.
- * The inference of componentRoot and stripPrefix hacks means that components
- * are named after their uniqe name in their component paths. Putting all components
- * in a subfolder above $commponents will make this path differ from $components.
+/**
+ * The component loader
+ *
+ * Convenience functions to maintain and access a dynamic map of all components.
+ *
+ * Pages pick the components they need and the rest aren't loaded,
+ * so bundle is kept minimal, just as with static loading.
  */
-const componentMap: ComponentMap = (() => {
-  const modules = import.meta.glob('$components/**/*.svelte');
-  const componentRoot = inferComponentRoot(Object.keys(modules));
-  return stripPrefix(modules, componentRoot);
-})(); // Note the self invocation
 
-function stripPrefix(obj: Record<string, any>, prefix: string) {
-  return Object.fromEntries(
-    Object.entries(obj).map(([key, val]) => [
-      key.slice(prefix.length, key.length - '.svelte'.length),
-      val
-    ])
-  );
+/* A lazy map of all components expected by content
+ */
+let componentMap: ComponentMap;
+
+/* Reduce keys to friendly component names like 'Hero' or 'Blog/Post',
+ * instead of full paths like:
+ *
+ * /src/lib/components/Hero.svelte or
+ * /src/lib/components/Blog/Post.svelte
+ *
+ * Usage:
+ * Set statically in page.ts for universal resolution, e.g:
+ * setComponentMap(import.meta.glob('$lib/components/**\/*.svelte'));
+ */
+export function setComponentMap(
+  modules: Record<string, () => Promise<unknown>>
+) {
+  const componentRoot = inferCommonPath(Object.keys(modules));
+  componentMap = trimKey(modules, componentRoot.length, '.svelte'.length);
 }
 
-function inferComponentRoot(arr: string[]) {
-  return arr.reduce((prefix, str) => {
-    let i = 0;
-    while (i < prefix.length && prefix[i] === str[i]) i++;
-    return prefix.slice(0, i);
-  });
-}
-
-/* This wrapper is just for error handling so far, but it feels safe to
- * keep the wrapping
+/* How everyone in here should get a component from componentMap
  */
-const getComponent = async (name: string) => {
+export const getComponent = async (name: string) => {
+  if (!Object.keys(componentMap).length) {
+    throw new Error(
+      'Component map is empty. Did you forget to call setComponentMap()?'
+    );
+  }
   if (!(name in componentMap)) {
     throw new Error(`Component not found: ${name}`);
   }
@@ -49,8 +52,11 @@ const getComponent = async (name: string) => {
   return component;
 };
 
-/* Take content for a component, validate it if it exports a schema and return
- * the imported component module together with its props.
+/* Get module with props in a neat package
+ * (to minimize boilerplate in componentes)
+ *
+ * "ResolvedComponent" is maybe not the best name for a data type that is literally
+ * an unresolved component. ¯\_(ツ)_/¯
  */
 export const resolveComponent = async (
   content: ComponentContent
@@ -60,8 +66,37 @@ export const resolveComponent = async (
   return { component, props };
 };
 
-/* Make content adhere to their schema and parse all markdown types with remark.
- * This should only run serverside.
+/* Resolve all components in a page, reattach page properties if page is
+ * a component.
+ *
+ * The title assignment looks out of place because it is,
+ * also if the page is not a component, the title will be
+ * untouched and the assignment isn't even needed.
+ *
+ * Let's see what properties a page may need before we go nuts here.
+ */
+export const resolvePage = async (page: PageContent) => {
+  const resolvedPage = await contentTraverser({
+    obj: page,
+    filter: (obj) => 'component' in obj,
+    callback: (obj) => resolveComponent(obj)
+  });
+  resolvedPage.title = page.title;
+  return resolvedPage;
+};
+
+/* Validate and transform content
+ *
+ * This should only run serverside because schema.spa will pull in the whole unified
+ * shenanigan if it encounters a markdown field.
+ *
+ * In fact, this function may not even belong here and should be in content
+ * loader or something.
+ *
+ * Also, what's with "conform"? Who writes that?
+ *
+ * Maybe just pay the price for writing a function that does two things and name it
+ * validateAndTransformComponent. <- Actually not a bad idead.
  */
 export const conformComponent = async (
   content: ComponentContent
@@ -76,12 +111,4 @@ export const conformComponent = async (
     );
   }
   return result.data;
-};
-
-export const resolvePage = async (page: PageContent) => {
-  return await contentTraverser({
-    obj: page,
-    filter: (obj) => 'component' in obj,
-    callback: (obj) => resolveComponent(obj)
-  });
 };

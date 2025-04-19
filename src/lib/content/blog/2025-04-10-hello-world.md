@@ -8,7 +8,7 @@ _author: people/_alex.yaml
 slots:
   alert-with-dragon:
     component: Alert
-    color: success
+    theme: alert-warning
     icon: fa-dragon
     text: Allt gick bra
 ---

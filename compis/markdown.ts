@@ -1,3 +1,17 @@
+/**
+ * Parse that markdown
+ *
+ * Features:
+ * - Add basic DaisyUI classes
+ * - Decrease headings
+ * - Create toc from headings and put in data.
+ * - Set placeholders for slots
+ * - Unicode emoji support
+ * - Definition lists
+ * - Gfm
+ * - Slightly extended table functions
+ * - Can take options
+ */
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 import remarkLint from 'remark-lint';
@@ -13,7 +27,6 @@ import rehypeStringify from 'rehype-stringify';
 
 import { unified } from 'unified';
 import type { VFile } from 'vfile';
-import type { Root } from 'mdast';
 
 import parseHeadings from './unified-plugins/headings';
 import addLinkClass from './unified-plugins/daisyui';
@@ -25,12 +38,18 @@ import {
 
 import type { PreparedMarkdown } from './types';
 
+/* Take a prepared markdown object and return a { html, data } object.
+ *
+ * This function should really have a return type.
+ * Why doesnt the linter complain?
+ * Let's infer from parsedHtml (in schemas.ts) some day.
+ *
+ * Functionality buds here and moves to unified-plugins when worthy.
+ * This will surely crystallize over time.
+ */
 export const parse = async (preparedMarkdown: PreparedMarkdown) => {
   try {
     const result = await unified()
-      /* This is safe to remove because no plugin is using frontmatter yet,
-       * it's left here for the future.
-       */
       .use(() => (_, vfile: VFile) => {
         vfile.data.meta = { options: preparedMarkdown.options };
       })

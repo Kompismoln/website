@@ -1,5 +1,5 @@
 <script module>
-  import { z, ze } from 'compis/schemas';
+  import { z, ze } from '../..//schemas';
 
   export const schema = ze.content({
     theme: z.string(),
@@ -12,7 +12,4 @@
   const { theme, icon, text } = $props();
 </script>
 
-<div role="alert" class="alert {theme}">
-  <i class="fa-solid text-3xl {icon}"></i>
-  <span>{@html text.html}</span>
-</div>
+<h1>asdf</h1>

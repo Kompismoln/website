@@ -13,11 +13,6 @@ export interface ComponentContent {
   [key: string]: unknown;
 }
 
-/* Just the props without the component attribute..
- * (like ComponentContent but without the component name, because it's not a prop)
- */
-export type ComponentProps<T extends ComponentContent> = Omit<T, 'component'>;
-
 /* The data from some content file in src/lib/content
  */
 export interface PageContent {
@@ -36,9 +31,6 @@ export type ContentTraverser<T> = (handle: {
   deep?: Boolean;
 }) => Promise<T>;
 
-/* A record of page content indexed by their site path.
- */
-export type SiteContent = Record<string, PageContent>;
 
 /* Shape of the return value of vite's glob, a ComponentMap of ComponentModules.
  */
@@ -46,7 +38,8 @@ type ComponentModule = {
   default: ComponentType;
   schema?: ZodObject;
 };
-export type ComponentMap = Record<string, () => Promise<ComponentModule>>;
+
+type ComponentMap = Record<string, () => Promise<ComponentModule>>;
 
 /* A component module together with its props, ready to be rendered by svelte. */
 export interface ResolvedComponent<
