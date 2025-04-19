@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'animate.css';
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 
 @plugin '@tailwindcss/typography';
@@ -10,10 +11,12 @@
   --swiper-navigation-color: var(--color-secondary);
 }
 
-@layer components {
-  .title {
-    @apply pb-2 text-3xl font-bold md:text-5xl;
-  }
+h1 {
+  @apply text-4xl md:text-6xl font-bold;
+}
+
+h2 {
+  @apply text-4xl md:text-6xl font-bold;
 }
 
 html,
@@ -27,61 +30,6 @@ body {
 }
 main {
   flex: 1;
-}
-
-.marked-emoji-img {
-  @reference "tailwindcss";
-  @apply m-0;
-  vertical-align: top;
-  height: 1.5em;
-  display: inline-block;
-}
-
-.alert-default {
-}
-.alert-base100 {
-  background-color: var(--color-base-100);
-  color: var(--color-base-content);
-}
-.alert-base200 {
-  background-color: var(--color-base-200);
-  color: var(--color-base-content);
-}
-.alert-base300 {
-  background-color: var(--color-base-300);
-  color: var(--color-base-content);
-}
-.alert-primary {
-  background-color: var(--color-primary);
-  color: var(--color-primary-content);
-}
-.alert-secondary {
-  background-color: var(--color-secondary);
-  color: var(--color-secondary-content);
-}
-.alert-accent {
-  background-color: var(--color-accent);
-  color: var(--color-accent-content);
-}
-.alert-neutral {
-  background-color: var(--color-neutral);
-  color: var(--color-neutral-content);
-}
-.alert-info {
-  background-color: var(--color-info);
-  color: var(--color-info-content);
-}
-.alert-success {
-  background-color: var(--color-success);
-  color: var(--color-success-content);
-}
-.alert-warning {
-  background-color: var(--color-warning);
-  color: var(--color-warning-content);
-}
-.alert-error {
-  background-color: var(--color-error);
-  color: var(--color-error-content);
 }
 
 @plugin "daisyui/theme" {

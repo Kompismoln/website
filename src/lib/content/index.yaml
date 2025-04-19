@@ -5,23 +5,22 @@ components:
     body: |
       # NixOS-baserad infrastruktur till _er tjänst!_
       En molnbyrå som hjälper människor och företag att
-      förverkliga idéer och hantera sin IT-miljö.
-      Vi erbjuder konsulttjänster samt ett lokaldrivet
-      och decentraliserat alternativ till Google drive,
-      Dropbox, iCloud, Zoom, AWS, Heroku med flera.
+      förverkliga [idéer](https://example.com) och hantera sin IT-miljö.
+      Här hittar du konsulttjänster och decentraliseratde alternativ till
+      Google drive, Dropbox, iCloud, Zoom, AWS, Heroku med flera.
     buttons:
       - text: 'Berätta mer'
         url: '/about'
-        primary: true
+        fill: true
       - text: 'Vad är NixOS?'
         url: '/tools/nixos'
-        primary: false
+        fill: false
 
   - component: Swipe
     intro:
       component: Blurb
       body: |
-        ## Sånt pågår just nu
+        # Sånt pågår just nu
     slides:
       - component: Card
         title: 'Free to host'

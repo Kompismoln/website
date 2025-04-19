@@ -12,31 +12,31 @@ import {
 import rehypeStringify from 'rehype-stringify';
 
 import { unified } from 'unified';
+import type { VFile } from 'vfile';
+import type { Root } from 'mdast';
 
 import parseHeadings from './unified-plugins/headings';
-import replace from './unified-plugins/replace';
+import addLinkClass from './unified-plugins/daisyui';
 import parseSlots from './unified-plugins/slots';
 import {
   remarkDefinitionList,
   defListHastHandlers
 } from './unified-plugins/definitionList';
 
-import type { VFile } from 'vfile';
-import type { ComponentContent } from './types';
+import type { PreparedMarkdown } from './types';
 
-export const parse = async (val: string, content: ComponentContent) => {
+export const parse = async (preparedMarkdown: PreparedMarkdown) => {
   try {
     const result = await unified()
       /* This is safe to remove because no plugin is using frontmatter yet,
        * it's left here for the future.
        */
       .use(() => (_, vfile: VFile) => {
-        vfile.data.frontmatter = content;
+        vfile.data.meta = { options: preparedMarkdown.options };
       })
       .use(remarkParse)
       .use(emoji, { accessible: true })
       .use(remarkLint)
-      .use(replace)
       .use(parseHeadings)
       .use(parseSlots)
       .use(remarkGfm)
@@ -44,23 +44,34 @@ export const parse = async (val: string, content: ComponentContent) => {
       .use(remarkDirective)
       .use(remarkExtendedTable)
 
+      .use(() => (tree: Root) => {
+        if (
+          tree.children.length === 1 &&
+          tree.children[0].type === 'paragraph'
+        ) {
+          tree.children = tree.children[0].children;
+        }
+      })
       .use(remarkRehype, {
         handlers: {
           ...extendedTableHandlers,
           ...defListHastHandlers
         }
       })
+      .use(addLinkClass)
 
       .use(rehypeStringify)
 
-      .process(val);
+      .process(preparedMarkdown.markdown);
 
-    delete result.data.frontmatter;
+    delete result.data.meta;
     return {
       html: String(result.value),
       data: result.data
     };
   } catch (error: any) {
-    throw new Error(`Failed to parse input: "${val.slice(0, 50)}" - ${error}`);
+    throw new Error(
+      `Failed to parse input: "${preparedMarkdown.markdown.slice(0, 50)}" - ${error}`
+    );
   }
 };

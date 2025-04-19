@@ -48,10 +48,10 @@ export const loadPageContent = async (searchPath: string) => {
   searchPath = searchPath === '' ? config.indexFile : searchPath;
 
   // Find page or throw
-  const page = await findPageContent(searchPath);
+  let page = await findPageContent(searchPath);
 
   try {
-    await processPage(page);
+    page = await processPage(page);
   } catch (error: any) {
     throw new Error(
       `Failed to process page '${searchPath}': ${error.message || error}`
@@ -61,12 +61,12 @@ export const loadPageContent = async (searchPath: string) => {
   return page;
 };
 
-export const processPage = async (page: PageContent) => {
+export const processPage = async (page: PageContent): Promise<PageContent> => {
   /*
    * Recursively resolve all fragments
    * (Content properties starting with underscore)
    */
-  await contentTraverser({
+  page = await contentTraverser({
     obj: page,
     filter: (obj) => Object.keys(obj).some((key: string) => key[0] === '_'),
     callback: parseFragment
@@ -74,11 +74,13 @@ export const processPage = async (page: PageContent) => {
 
   /* Validate and parse markdown on all components
    */
-  await contentTraverser({
+  page = await contentTraverser({
     obj: page,
     filter: (obj) => 'component' in obj,
     callback: conformComponent
   });
+
+  return page;
 };
 
 /* Probe all extensions in content root for the given path.

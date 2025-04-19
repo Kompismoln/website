@@ -1,6 +1,6 @@
 import z from 'zod';
 import { browser } from '$app/environment';
-import type { ComponentContent } from './types';
+import type { ComponentContent, PreparedMarkdown, ParsedHtml } from './types';
 
 export { z };
 
@@ -15,25 +15,30 @@ const processClient = (content: ComponentContent) => {
 
 const processServer = async (content: ComponentContent) => {
   const parse = (await import('./markdown')).parse;
+  const isPreparedMarkdown = (val: unknown): val is PreparedMarkdown => {
+    return !!val && typeof val === 'object' && 'markdown' in val;
+  };
+
   const entries = await Promise.all(
-    Object.entries(content).map(async ([key, val]) =>
-      val && typeof val === 'object' && 'md' in val
-        ? [key, await parse(val.md as string, content)]
-        : [key, val]
+    Object.entries(content).map(async ([key, val]) => 
+      isPreparedMarkdown(val) ? [key, await parse(val)] : [key, val]
     )
   );
   return Object.fromEntries(entries);
 };
 
-const markdown = () => {
+const markdown = (options = {}) => {
   /* If markdown is string, mark it so it can be recognized by component-wide
    * transform.
    */
-  const prepare = (val: string) => ({ md: val });
-  return z.string().transform(prepare).or(parsedMarkdown());
+  const prepare = (val: string): PreparedMarkdown => ({
+    markdown: val,
+    options
+  });
+  return z.string().transform(prepare).or(parsedHtml());
 };
 
-const parsedMarkdown = () =>
+const parsedHtml = (): z.ZodType<ParsedHtml> =>
   z.object({
     html: z.string(),
     data: z.object({}).passthrough()
@@ -50,8 +55,7 @@ const component = (allowed: string[] | null = null) => {
 const slots = (allowed = null) => z.record(component(allowed));
 
 const content = (obj: any) => {
-  const process = (content: any) =>
-    (browser ? processClient : processServer)(content);
+  const process = browser ? processClient : processServer;
 
   return z
     .object({ ...obj, component: z.string() })

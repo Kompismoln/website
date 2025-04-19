@@ -18,7 +18,7 @@ const button = () =>
   z.object({
     url: z.string(),
     text: z.string(),
-    primary: z.boolean().optional()
+    fill: z.boolean().optional()
   });
 
 const social = () =>

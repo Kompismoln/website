@@ -4,37 +4,76 @@
 
   export const schema = ze.content({
     primer: z.string(),
-    body: ze.markdown(),
+    body: ze.markdown({
+      decreaseHeadings: false
+    }),
     buttons: z.array(s.button()).max(2)
   });
 </script>
 
 <script lang="ts">
   let { primer, body, buttons } = $props();
+    let animations = [
+    'animate__backInDown',
+    'animate__shakeX',
+    'animate__shakeY',
+    'animate__zoomInDown',
+    'animate__rollIn',
+    'animate__lightSpeedInRight',
+    'animate__tada',
+    'animate__wobble',
+    'animate__swing',
+    'animate__hinge',
+    'animate__backOutUp',
+  ];
+
+  let current = 0;
+  let anim = $state(animations[current]);
+
+  function trigger(event: Event) {
+    const el = event.target as Element;
+    if (!el) {
+      return;
+    }
+
+    el.classList.remove(anim);
+    current = (current + 1) % animations.length;
+    anim = animations[current];
+    el.classList.add(anim);
+  }
 </script>
 
-<div class="hero min-h-[60vh]">
-  <div class="hero-content py-12 text-center">
-    <div class="max-w-xl">
+<div class="hero py-6">
+  <div class="hero-content text-center">
+    <div class="max-w-3xl space-y-6">
       <div
-        class="text-secondary mb-3 pb-1 text-xl font-bold md:mb-7 md:text-3xl"
+        class="
+        py-6
+        text-secondary
+        animate__animated
+        {anim}
+        font-bold
+        text-base
+        md:text-2xl
+        "
+        role="button"
+        tabindex="-1"
+        onkeyup={trigger}
+        onclick={trigger}
       >
         {primer}
       </div>
 
-      <div class="markdown-content">
+      <div class="markdown-content space-y-6">
         {@html body.html}
       </div>
       {#if buttons}
-        <div
-          class="mt-6 flex flex-row flex-wrap place-content-center gap-4 md:mt-4"
-        >
+        <div class="flex flex-row flex-wrap place-content-center gap-4">
           {#each buttons as button}
             <a href={button.url}>
-              <button
-                class:btn-outline={!button.primary}
-                class="btn btn-primary">{button.text}</button
-              >
+              <button class:btn-outline={!button.fill} class="btn btn-primary">
+                {button.text}
+              </button>
             </a>
           {/each}
         </div>
@@ -44,11 +83,6 @@
 </div>
 
 <style lang="postcss">
-  .markdown-content :global h1 {
-    @reference "tailwindcss";
-    @apply px-2 text-4xl font-bold md:text-6xl;
-    line-height: 1.2;
-  }
   .markdown-content :global h1 em {
     @reference "tailwindcss";
     @apply underline decoration-4 md:decoration-[6px];
@@ -57,6 +91,6 @@
   }
   .markdown-content :global p {
     @reference "tailwindcss";
-    @apply mt-6 text-sm md:mt-10 md:text-lg;
+    @apply text-base md:text-lg;
   }
 </style>

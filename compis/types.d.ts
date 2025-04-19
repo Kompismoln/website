@@ -29,11 +29,12 @@ export interface PageContent {
 
 /* For content traversers
  */
-export type ContentTraverser = (handle: {
-  obj: any;
-  filter: (val: any) => boolean;
-  callback: (val: any) => void | Promise<void>;
-}) => void | Promise<void>;
+export type ContentTraverser<T> = (handle: {
+  obj: T;
+  filter: (val: T) => boolean;
+  callback: (val: T) => Promise<T>;
+  deep?: Boolean;
+}) => Promise<T>;
 
 /* A record of page content indexed by their site path.
  */
@@ -53,4 +54,27 @@ export interface ResolvedComponent<
 > {
   component: ComponentType;
   props: ComponentProps<T>;
+}
+
+export type PreparedMarkdown = {
+  markdown: string;
+  options: Record<string, any>;
+};
+
+export type ParsedHtml = {
+  html: string;
+  data: Record<string, unknown>;
+};
+
+import 'vfile';
+
+declare module 'vfile' {
+  interface DataMap {
+    meta?: {
+      options?: {
+        decreaseHeadings?: boolean;
+      };
+    };
+    headings?: any[];
+  }
 }

@@ -14,7 +14,9 @@ export default function parseHeadings() {
         text: toString(node),
         id: id
       });
-      node.depth++;
+      if (file.data.meta?.options?.decreaseHeadings !== false) {
+        node.depth++;
+      }
     });
     file.data.headings = headings;
   };

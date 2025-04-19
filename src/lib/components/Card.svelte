@@ -23,9 +23,9 @@
         alt={image.alt}
       />
     </div>
-    <h2 class="card-title">
+    <p class="card-title">
       {title}
-    </h2>
+    </p>
     <p class="pb-12">
       {description}
     </p>
