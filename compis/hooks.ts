@@ -1,11 +1,10 @@
-import type { ComponentContent } from './types';
-import { resolveComponent } from './component.loader';
+import type { ResolvedComponent } from './types';
 import { onMount, mount } from 'svelte';
 
-export function mountSlots(slots: ComponentContent[]) {
+export function mountSlots(slots: ResolvedComponent[]) {
   onMount(() => {
     for (const key in slots) {
-      const { component, props } = resolveComponent(slots[key]);
+      const { component, props } = slots[key];
       const target = document.querySelector(`[data-slot="${key}"]`);
 
       if (!target) {

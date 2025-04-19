@@ -8,20 +8,17 @@
 </script>
 
 <script lang="ts">
-  import { resolveComponent } from 'compis/component.loader';
   let { intro, items } = $props();
-  const Intro = resolveComponent(intro);
 </script>
 
 <div class="min-h-[60vh]">
   <div class="px-7 pt-20 pb-8">
-    <Intro.component {...Intro.props} />
+    <intro.component {...intro.props} />
     <div
       class="mx-auto mt-12 flex max-w-[1064px] flex-wrap place-content-center gap-6"
     >
       {#each items as item}
-        {@const Item = resolveComponent(item)}
-        <Item.component {...Item.props} />
+        <item.component {...item.props} />
       {/each}
     </div>
   </div>

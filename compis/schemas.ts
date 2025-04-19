@@ -20,7 +20,7 @@ const processServer = async (content: ComponentContent) => {
   };
 
   const entries = await Promise.all(
-    Object.entries(content).map(async ([key, val]) => 
+    Object.entries(content).map(async ([key, val]) =>
       isPreparedMarkdown(val) ? [key, await parse(val)] : [key, val]
     )
   );
@@ -60,7 +60,7 @@ const content = (obj: any) => {
   return z
     .object({ ...obj, component: z.string() })
     .strict()
-    .transform(process);
+    .transform((val) => process(val as ComponentContent));
 };
 
 export const ze = { markdown, component, slots, content };

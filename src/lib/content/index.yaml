@@ -83,7 +83,7 @@ components:
 
   - component: Dual
     title: See it in action
-    slots:
+    panes:
       - component: Mockup
         link:
           text: example.com

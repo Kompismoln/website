@@ -10,11 +10,8 @@
 <script lang="ts">
   import { register } from 'swiper/element/bundle';
   import { onMount } from 'svelte';
-  import { resolveComponent } from 'compis/component.loader';
 
   let { intro, slides } = $props();
-
-  const Intro = resolveComponent(intro);
 
   register();
   onMount(() => {
@@ -40,7 +37,7 @@
 
 <div class="min-h-[60vh]">
   <div class="pt-20 pb-8 md:px-7">
-    <Intro.component {...Intro.props} />
+    <intro.component {...intro.props} />
     <div class="mx-auto mt-12 max-w-[1064px]">
       <swiper-container
         navigation="true"
@@ -50,9 +47,8 @@
         init="false"
       >
         {#each slides as slide}
-          {@const Slide = resolveComponent(slide)}
           <swiper-slide class="flex items-center justify-center">
-            <Slide.component {...Slide.props} />
+            <slide.component {...slide.props} />
           </swiper-slide>
         {/each}
       </swiper-container>

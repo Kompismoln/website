@@ -1,3 +1,7 @@
+import matter from 'gray-matter';
+import yaml from 'js-yaml';
+import fs from 'node:fs/promises';
+
 import { globSync } from 'node:fs';
 import path from 'node:path';
 import { redirect } from '@sveltejs/kit';
@@ -5,7 +9,7 @@ import { redirect } from '@sveltejs/kit';
 import type { PageContent } from './types';
 import { conformComponent } from './component.loader';
 import config from './config';
-import { contentTraverser, parseFile, parseFragment } from './utils';
+import { contentTraverser } from './utils';
 
 const filetypes = ['js', 'ts', 'json', 'yaml', 'yml', 'md'];
 
@@ -101,4 +105,60 @@ export const findPageContent = async (searchPath: string) => {
     }
   }
   throw new Error(`No file matched '${searchPath}.@(${filetypes.join('|')})'`);
+};
+
+/* Try to parse the suggested file path and return whats in it.
+ * Should handle all `filetypes`
+ */
+export const parseFile = async (filePath: string): Promise<any> => {
+  const fileExt = path.extname(filePath);
+
+  if (['.js', '.ts'].includes(fileExt)) {
+    return (await import(/* @vite-ignore */ filePath)).default;
+  }
+
+  const fileContent = await fs.readFile(filePath, 'utf-8');
+
+  if (fileExt === '.md') {
+    const { data, content: body } = matter(fileContent);
+    return { ...data, body };
+  }
+  if (['.yml', '.yaml'].includes(fileExt)) {
+    return yaml.load(fileContent);
+  }
+  if (fileExt === '.json') {
+    return JSON.parse(fileContent);
+  }
+  /* This will only happen if filePath has an unsupported filetype
+   */
+  throw new Error(`unsupported extension: '${fileExt}'.`);
+};
+
+/* Load the content of fragment file(s) and attach them to the content tree.
+ * If the key is just an underscore, use fragment properties as default for
+ * the object itself.
+ * Otherwise, attach the fragment to the property with underscore removed.
+ * Either way, delete the key for the fragment.
+ */
+export const parseFragment = async (obj: any) => {
+  const keys = Object.keys(obj);
+
+  if ('_' in keys) {
+    const fragment = await parseFile(path.join(config.contentRoot, obj._));
+    delete obj._;
+    Object.assign(obj, fragment);
+  }
+
+  const refs = keys.filter((key) => key[0] === '_');
+
+  if (refs.length === 0) return obj;
+
+  for (const i in refs) {
+    const ref = refs[i];
+    const fragment = await parseFile(path.join(config.contentRoot, obj[ref]));
+    delete obj[ref];
+    obj[ref.slice(1)] = fragment;
+  }
+
+  return obj;
 };

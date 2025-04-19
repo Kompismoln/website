@@ -13,14 +13,11 @@
 </script>
 
 <script lang="ts">
-  import { resolveComponent } from 'compis/component.loader';
   import { mountSlots } from 'compis/hooks';
 
   let { title, h1, date, dateString, body, author, slots } = $props();
 
   mountSlots(slots);
-
-  const Author = resolveComponent(author);
 
   dateString = dateString ?? date.toISOString().slice(0, 10);
 </script>
@@ -39,7 +36,7 @@
     </section>
 
     <section class="mt-8 flex items-center border-t pt-6">
-      <Author.component {...Author.props} />
+      <author.component {...author.props} />
     </section>
   </article>
 </div>

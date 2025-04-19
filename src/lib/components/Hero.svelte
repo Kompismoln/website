@@ -13,7 +13,7 @@
 
 <script lang="ts">
   let { primer, body, buttons } = $props();
-    let animations = [
+  let animations = [
     'animate__backInDown',
     'animate__shakeX',
     'animate__shakeY',
@@ -24,7 +24,7 @@
     'animate__wobble',
     'animate__swing',
     'animate__hinge',
-    'animate__backOutUp',
+    'animate__backOutUp'
   ];
 
   let current = 0;
@@ -48,12 +48,12 @@
     <div class="max-w-3xl space-y-6">
       <div
         class="
-        py-6
         text-secondary
         animate__animated
+        py-6
         {anim}
-        font-bold
         text-base
+        font-bold
         md:text-2xl
         "
         role="button"

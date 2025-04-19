@@ -44,14 +44,6 @@ export const parse = async (preparedMarkdown: PreparedMarkdown) => {
       .use(remarkDirective)
       .use(remarkExtendedTable)
 
-      .use(() => (tree: Root) => {
-        if (
-          tree.children.length === 1 &&
-          tree.children[0].type === 'paragraph'
-        ) {
-          tree.children = tree.children[0].children;
-        }
-      })
       .use(remarkRehype, {
         handlers: {
           ...extendedTableHandlers,

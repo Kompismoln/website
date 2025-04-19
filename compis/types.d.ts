@@ -46,7 +46,7 @@ type ComponentModule = {
   default: ComponentType;
   schema?: ZodObject;
 };
-export type ComponentMap = Record<string, ComponentModule>;
+export type ComponentMap = Record<string, () => Promise<ComponentModule>>;
 
 /* A component module together with its props, ready to be rendered by svelte. */
 export interface ResolvedComponent<
