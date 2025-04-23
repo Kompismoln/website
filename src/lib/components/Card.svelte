@@ -4,7 +4,7 @@
 
   export const schema = ze.content({
     title: z.string(),
-    description: z.string(),
+    description: ze.markdown(),
     image: s.image(),
     link: s.link().optional()
   });
@@ -14,23 +14,19 @@
   const { title, description, image, link } = $props();
 </script>
 
-<div class="card bg-base-200 min-h-[300px] w-[270px]">
-  <div class="card-body items-center p-[24px] pt-[32px] text-center">
-    <div>
-      <img
-        class="h-20 w-20 flex-none object-contain"
-        src={image.src}
-        alt={image.alt}
-      />
-    </div>
-    <p class="card-title">
+<div class="card bg-base-200 not-prose">
+  <div class="card-body items-center text-center">
+    <p class="card-title text-secondary text-2xl">
       {title}
     </p>
-    <p class="pb-12">
-      {description}
+    <div class="p-4">
+      <img class="h-36" src={image.src} alt={image.alt} />
+    </div>
+    <p>
+      {@html description.html}
     </p>
     {#if link}
-      <a href={link.url} class="pb-12" target={link.blank ? '_blank' : ''}>
+      <a href={link.url} target={link.blank ? '_blank' : ''}>
         <button class="btn btn-outline btn-primary min-w-[100px]"
           >{link.text}</button
         >

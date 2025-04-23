@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { LayoutProps } from './$types';
+  import 'highlight.js/styles/atom-one-dark.css';
 
   import '../../app.css';
   import config from '$lib/config';
@@ -20,7 +21,8 @@
   const nav = {
     logo: config.logo,
     searchPage: config.searchPage,
-    menu: config.menu
+    menu: config.menu,
+    themes: config.themes
   };
 
   const footer = {
@@ -35,7 +37,7 @@
 <Head {...head} />
 <Nav {...nav} />
 
-<main>
+<main class="pt-8 md:pt-24">
   {@render children()}
 </main>
 

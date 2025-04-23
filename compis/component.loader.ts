@@ -5,6 +5,7 @@ import type {
   PageContent
 } from './types';
 
+import { createRawSnippet } from 'svelte';
 import { contentTraverser, inferCommonPath, trimKey } from './utils';
 
 /**
@@ -76,13 +77,28 @@ export const resolveComponent = async (
  * Let's see what properties a page may need before we go nuts here.
  */
 export const resolvePage = async (page: PageContent) => {
-  const resolvedPage = await contentTraverser({
+  const title = page.title;
+
+  page = await contentTraverser({
     obj: page,
     filter: (obj) => 'component' in obj,
     callback: (obj) => resolveComponent(obj)
   });
-  resolvedPage.title = page.title;
-  return resolvedPage;
+  page = await contentTraverser({
+    obj: page,
+    filter: (obj) => 'html' in obj,
+    callback: (obj) => {
+      obj.snippet = createRawSnippet(() => ({
+        render() {
+          return `<div>${obj.html}</div>`;
+        }
+      }));
+      return obj;
+    }
+  });
+
+  page.title = title;
+  return page;
 };
 
 /* Validate and transform content

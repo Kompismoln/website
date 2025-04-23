@@ -79,7 +79,7 @@ Jaså? sa myran. Då går vi då.
 Myran greppade bladlusen, lyfte upp den och började gå tillbaka.
 
 :::slot{#alert-with-dragon}
-Notis: Allt gick bra
+Hello non-javascript user, here's a message to you: we understand you.
 :::
 
 [Hello](#custom-id)

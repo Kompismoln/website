@@ -2,7 +2,7 @@
   import { z, ze } from 'compis/schemas';
 
   export const schema = ze.content({
-    intro: ze.component(['Blurb']),
+    intro: ze.component(['Blurb']).optional(),
     slides: z.array(ze.component(['Card']))
   });
 </script>
@@ -35,23 +35,23 @@
   });
 </script>
 
-<div class="min-h-[60vh]">
-  <div class="pt-20 pb-8 md:px-7">
+<div>
+  {#if intro}
     <intro.component {...intro.props} />
-    <div class="mx-auto mt-12 max-w-[1064px]">
-      <swiper-container
-        navigation="true"
-        centered-slides="true"
-        effect="coverflow"
-        coverflow-effect-slide-shadows="false"
-        init="false"
-      >
-        {#each slides as slide}
-          <swiper-slide class="flex items-center justify-center">
-            <slide.component {...slide.props} />
-          </swiper-slide>
-        {/each}
-      </swiper-container>
-    </div>
+  {/if}
+  <div>
+    <swiper-container
+      navigation="true"
+      centered-slides="true"
+      effect="coverflow"
+      coverflow-effect-slide-shadows="false"
+      init="false"
+    >
+      {#each slides as slide}
+        <swiper-slide class="flex items-center justify-center">
+          <slide.component {...slide.props} />
+        </swiper-slide>
+      {/each}
+    </swiper-container>
   </div>
 </div>

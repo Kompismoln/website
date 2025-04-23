@@ -8,11 +8,13 @@ export default {
     alt: 'kompismoln-logo'
   },
   searchPage: false,
+  // Don't forget to sync first value with fallback in app.html
+  themes: ['dark', 'light'],
   markdown: {
     blank: /^(http|https|ftp|mailto|tel|file|data|ws|wss|irc|git):/i
   },
   menu: [
-    { text: 'Blogg', url: '/blog' },
+    { text: 'Blogg', url: '/blog/hugo-like-sveltekit-ssg' },
     { text: 'Logga in', url: 'https://nc.kompismoln.se' }
   ],
   license:

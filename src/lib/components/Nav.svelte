@@ -5,75 +5,26 @@
   export const schema = ze.content({
     logo: s.image(),
     searchPage: z.union([z.boolean(), z.string()]),
-    menu: z.array(s.link()).max(4)
+    menu: z.array(s.link()).max(4),
+    themes: z.array(z.number())
   });
 </script>
 
 <script lang="ts">
-  import { browser } from '$app/environment';
-
-  let { logo, searchPage, menu } = $props();
-  let altTheme = $state(false);
-
-  if (browser) {
-    altTheme = localStorage.getItem('altTheme') === '1';
-  }
-
-  const toggleTheme = (event: Event) => {
-    const altThemeString = (event.target as HTMLInputElement).checked
-      ? '1'
-      : '0';
-    localStorage.setItem('altTheme', altThemeString);
-  };
+  import ThemeController from './ThemeController.svelte';
+  let { logo, searchPage, menu, themes } = $props();
 </script>
 
-<div class="navbar bg-neutral text-neutral-content px-6">
+<div class="navbar bg-neutral text-neutral-content px-1 md:px-6">
   <div class="navbar-start">
     <img
-      class="h-20 w-20 flex-none object-contain"
+      class="h-20 w-20 flex-none object-contain p-2 md:p-0"
       src={logo.src}
       alt={logo.alt}
     />
   </div>
   <div class="navbar-center">
-    <label class="flex cursor-pointer gap-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-      </svg>
-      <input
-        type="checkbox"
-        value="light"
-        onchange={toggleTheme}
-        checked={altTheme}
-        class="toggle theme-controller"
-      />
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <circle cx="12" cy="12" r="5" />
-        <path
-          d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"
-        />
-      </svg>
-    </label>
+    <ThemeController {themes} />
   </div>
   <div class="navbar-end">
     <ul class="menu menu-horizontal hidden text-lg font-bold sm:flex">

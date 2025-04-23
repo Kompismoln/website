@@ -3,7 +3,8 @@ import type { PageLoad } from './$types';
 import { resolvePage } from 'compis/component.loader';
 import { setComponentMap } from 'compis/component.loader';
 
-setComponentMap(import.meta.glob('$lib/components/**/*.svelte'));
+const svelteComponents = import.meta.glob('$lib/components/**/*.svelte');
 
-export const load: PageLoad = async ({ data }) =>
-  resolvePage(data as PageContent);
+setComponentMap(svelteComponents);
+
+export const load: PageLoad = ({ data }) => resolvePage(data as PageContent);

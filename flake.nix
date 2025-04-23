@@ -19,7 +19,21 @@
     in
     {
 
-      packages.${system} = {
+      packages.${system}.default = pkgs.buildNpmPackage {
+        pname = name;
+        inherit version src;
+        npmDeps = pkgs.importNpmLock { npmRoot = src; };
+        npmConfigHook = pkgs.importNpmLock.npmConfigHook;
+        nativeBuildInputs = [ pkgs.nodejs_23 ];
+
+        buildPhase = ''
+          npm run build
+        '';
+
+        installPhase = ''
+          cp -r ./build $out
+        '';
+
       };
 
       devShells.${system} = {

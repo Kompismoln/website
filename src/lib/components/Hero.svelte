@@ -43,7 +43,7 @@
   }
 </script>
 
-<div class="hero py-6">
+<div class="hero">
   <div class="hero-content text-center">
     <div class="max-w-3xl space-y-6">
       <div
