@@ -17,6 +17,8 @@ import remarkGfm from 'remark-gfm';
 import remarkLint from 'remark-lint';
 import remarkRehype from 'remark-rehype';
 import remarkDirective from 'remark-directive';
+import rehypeHighlight from 'rehype-highlight';
+import { all } from 'lowlight';
 import emoji from 'remark-emoji';
 import {
   remarkExtendedTable,
@@ -64,10 +66,16 @@ export const parse = async (preparedMarkdown: PreparedMarkdown) => {
       .use(remarkExtendedTable)
 
       .use(remarkRehype, {
+        fragment: true,
         handlers: {
           ...extendedTableHandlers,
           ...defListHastHandlers
         }
+      })
+      .use(rehypeHighlight, {
+        detect: true,
+        ignoreMissing: true,
+        languages: all
       })
       .use(addLinkClass)
 

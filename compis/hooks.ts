@@ -1,5 +1,6 @@
 import type { ResolvedComponent } from './types';
-import { onMount, mount } from 'svelte';
+import { hydrate } from 'svelte';
+import { browser } from '$app/environment';
 
 /* Slots are components that attaches to a placeholder on mount.
  * Markdown parser render these placeholders.
@@ -9,15 +10,15 @@ import { onMount, mount } from 'svelte';
  * mountSlots(slots)
  */
 export function mountSlots(slots: Record<string, ResolvedComponent>) {
-  onMount(() => {
+  if (browser) {
     for (const key in slots) {
       const { component, props } = slots[key];
       const target = document.querySelector(`[data-slot="${key}"]`);
 
       if (target) {
         target.innerHTML = '';
-        mount(component, { target, props });
+        hydrate(component, { target, props });
       }
     }
-  });
+  }
 }

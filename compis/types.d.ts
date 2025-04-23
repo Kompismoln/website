@@ -31,7 +31,6 @@ export type ContentTraverser<T> = (handle: {
   deep?: Boolean;
 }) => Promise<T>;
 
-
 /* Shape of the return value of vite's glob, a ComponentMap of ComponentModules.
  */
 type ComponentModule = {
