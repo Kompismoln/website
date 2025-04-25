@@ -1,6 +1,8 @@
 import z from 'zod';
 import { browser } from '$app/environment';
 import type { ComponentContent, PreparedMarkdown, ParsedHtml } from './types';
+import { shortHash } from './utils';
+import { addVirtualComponent } from './component.loader';
 
 export { z };
 
@@ -46,14 +48,16 @@ const content = (obj: any) => {
   return z
     .object({ ...obj, component: z.string() })
     .strict()
-    .transform((val) => process(val as ComponentContent));
 };
 
-const markdown = (options = {}) => {
-  const prepare = (val: string): PreparedMarkdown => ({
-    markdown: val,
-    options
-  });
+const markdown = () => {
+  const prepare = (val: string): ComponentContent => {
+    const hash = shortHash(val);
+    const component = `virtual:${hash}`;
+    addVirtualComponent(component, val);
+
+    return { component };
+  };
   return z.string().transform(prepare).or(parsedHtml());
 };
 

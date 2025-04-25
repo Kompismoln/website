@@ -2,7 +2,8 @@ import type {
   ComponentMap,
   ComponentContent,
   ResolvedComponent,
-  PageContent
+  PageContent,
+  ComponentModule
 } from './types';
 
 import { createRawSnippet } from 'svelte';
@@ -20,6 +21,7 @@ import { contentTraverser, inferCommonPath, trimKey } from './utils';
 /* A lazy map of all components expected by content
  */
 let componentMap: ComponentMap;
+export const virtualComponentMap: Record<string, string> = {};
 
 /* Reduce keys to friendly component names like 'Hero' or 'Blog/Post',
  * instead of full paths like:
@@ -36,6 +38,10 @@ export function setComponentMap(
 ) {
   const componentRoot = inferCommonPath(Object.keys(modules));
   componentMap = trimKey(modules, componentRoot.length, '.svelte'.length);
+}
+
+export function addVirtualComponent(id: string, source: string) {
+  virtualComponentMap[id] = source;
 }
 
 /* How everyone in here should get a component from componentMap
@@ -63,6 +69,10 @@ export const resolveComponent = async (
   content: ComponentContent
 ): Promise<ResolvedComponent> => {
   const { component: name, ...props } = content;
+  if (name.startsWith('virtual:')) {
+    const { vmap } = await import('virtual:component-map');
+    console.log(vmap)
+  }
   const { default: component } = await getComponent(name);
   return { component, props };
 };
@@ -112,11 +122,15 @@ export const resolvePage = async (page: PageContent) => {
  * Also, what's with "conform"? Who writes that?
  *
  * Maybe just pay the price for writing a function that does two things and name it
- * validateAndTransformComponent. <- Actually not a bad idead.
+ * validateAndTransformComponent. <- Actually not a bad idea.
  */
 export const conformComponent = async (
   content: ComponentContent
 ): Promise<ComponentContent> => {
+  if (content.component.startsWith('virtual:')) {
+    return content;
+  }
+
   let { schema } = await getComponent(content.component);
 
   const result = await schema.spa(content);

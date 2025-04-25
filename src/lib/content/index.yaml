@@ -5,7 +5,7 @@ components:
     body: |
       # NixOS-baserad infrastruktur till er tjänst!
       En molnbyrå som hjälper människor och företag att
-      förverkliga [idéer](https://example.com) och hantera sin IT-miljö.
+      förverkliga idéer och hantera sin IT-miljö.
       Här hittar du konsulttjänster och decentraliseratde alternativ till
       Google drive, Dropbox, iCloud, Zoom, AWS, Heroku med flera.
     buttons:
