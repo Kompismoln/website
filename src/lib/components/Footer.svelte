@@ -1,11 +1,10 @@
 <script module>
-  import { z, ze } from 'compis/schemas';
-  import s from '$lib/components/schemas';
+  import c from 'compis/schemas';
 
-  export const schema = ze.content({
-    logo: s.image(),
-    license: z.string(),
-    socials: z.array(s.social()).max(7)
+  export const schema = c.content({
+    logo: c.image(),
+    license: c.string(),
+    socials: c.array(c.social()).max(7)
   });
 </script>
 

@@ -2,7 +2,8 @@ import type {
   ComponentMap,
   ComponentContent,
   ResolvedComponent,
-  PageContent
+  PageContent,
+  ComponentModule
 } from './types';
 
 import { createRawSnippet } from 'svelte';
@@ -21,6 +22,12 @@ import { contentTraverser, inferCommonPath, trimKey } from './utils';
  */
 let componentMap: ComponentMap;
 
+export let contentResolve: (value?: any) => void;
+
+export const contentReady = new Promise(resolve => { contentResolve = resolve; });
+export const virtualComponentMap: Record<string, string> = {};
+//contentReady.then(() => console.log(virtualComponentMap));
+
 /* Reduce keys to friendly component names like 'Hero' or 'Blog/Post',
  * instead of full paths like:
  *
@@ -38,19 +45,14 @@ export function setComponentMap(
   componentMap = trimKey(modules, componentRoot.length, '.svelte'.length);
 }
 
+export function addVirtualComponent(id: string, source: string) {
+  virtualComponentMap[id] = source;
+}
+
 /* How everyone in here should get a component from componentMap
  */
 export const getComponent = async (name: string) => {
-  if (!Object.keys(componentMap).length) {
-    throw new Error(
-      'Component map is empty. Did you forget to call setComponentMap()?'
-    );
-  }
-  if (!(name in componentMap)) {
-    throw new Error(`Component not found: ${name}`);
-  }
-  const component = await componentMap[name]();
-  return component;
+  return name;
 };
 
 /* Get module with props in a neat package
@@ -63,7 +65,8 @@ export const resolveComponent = async (
   content: ComponentContent
 ): Promise<ResolvedComponent> => {
   const { component: name, ...props } = content;
-  const { default: component } = await getComponent(name);
+
+  const component = await getComponent(name);
   return { component, props };
 };
 
@@ -112,7 +115,7 @@ export const resolvePage = async (page: PageContent) => {
  * Also, what's with "conform"? Who writes that?
  *
  * Maybe just pay the price for writing a function that does two things and name it
- * validateAndTransformComponent. <- Actually not a bad idead.
+ * validateAndTransformComponent. <- Actually not a bad idea.
  */
 export const conformComponent = async (
   content: ComponentContent

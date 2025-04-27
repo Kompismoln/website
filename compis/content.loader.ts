@@ -4,7 +4,6 @@ import fs from 'node:fs/promises';
 
 import { globSync } from 'node:fs';
 import path from 'node:path';
-import { redirect } from '@sveltejs/kit';
 
 import type { PageContent } from './types';
 import { conformComponent } from './component.loader';
@@ -30,37 +29,32 @@ const filetypes = ['js', 'ts', 'json', 'yaml', 'yml', 'md'];
  * because this function doesn't run there 🤔
  *
  */
-export const loadPageContent = async (searchPath: string) => {
-  // This redirect has no effect in production, handle redirects on webserver instead
-  if (searchPath === config.indexFile) throw redirect(301, '/');
-
+export const load = async ({ params }: any) => {
   // Rename site root to index file
-  searchPath = searchPath === '' ? config.indexFile : searchPath;
+  const searchPath = params.path === '' ? config.indexFile : params.path;
 
-  // Find page or throw
-  let page = await findPageContent(searchPath);
-
-  try {
-    page = await processPage(page);
-  } catch (error: any) {
-    throw new Error(
-      `Failed to process page '${searchPath}': ${error.message || error}`
-    );
-  }
-
-  return page;
+  const collectedPage = await collectPage(searchPath);
+  const processedPage = await processPage(collectedPage);
+  return processedPage;
 };
 
-/* Recurse in content tree and
- * - Replace all fragments with data from file
- * - Validate & transform all components
+/* Find pae and recurse in content tree and
+ * - Replace all fragments with data from fragment files
  */
-export const processPage = async (page: PageContent): Promise<PageContent> => {
-  page = await contentTraverser({
-    obj: page,
+export const collectPage = async (searchPath: string): Promise<PageContent> => {
+  const rawPage = await findPageContent(searchPath)
+  const page = await contentTraverser({
+    obj: rawPage,
     filter: (obj) => Object.keys(obj).some((key: string) => key[0] === '_'),
     callback: parseFragment
   });
+  return page;
+}
+
+/* Recurse in content tree and
+ * - Validate & transform all components
+ */
+export const processPage = async (page: PageContent): Promise<PageContent> => {
 
   page = await contentTraverser({
     obj: page,
@@ -77,7 +71,8 @@ export const findPageContent = async (searchPath: string) => {
   for (const ext of filetypes) {
     const filePath = path.join(config.contentRoot, `${searchPath}.${ext}`);
     try {
-      return await parseFile(filePath);
+      const page = await parseFile(filePath);
+      return page;
     } catch (error: any) {
       if (['ENOENT', 'ERR_MODULE_NOT_FOUND'].includes(error.code)) {
         continue;
@@ -93,9 +88,9 @@ export const findPageContent = async (searchPath: string) => {
 export const parseFile = async (filePath: string): Promise<any> => {
   const fileExt = path.extname(filePath);
 
-  if (['.js', '.ts'].includes(fileExt)) {
-    return (await import(/* @vite-ignore */ filePath)).default;
-  }
+  //if (['.js', '.ts'].includes(fileExt)) {
+  //  return (await import(/* @vite-ignore */ filePath)).default;
+  //}
 
   const fileContent = await fs.readFile(filePath, 'utf-8');
 
