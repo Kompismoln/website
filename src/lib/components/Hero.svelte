@@ -1,13 +1,10 @@
 <script module>
-  import { z, ze } from 'compis/schemas';
-  import s from '$lib/components/schemas';
+  import c from 'compis/schemas';
 
-  export const schema = ze.content({
-    primer: z.string(),
-    body: ze.markdown({
-      decreaseHeadings: false
-    }),
-    buttons: z.array(s.button()).max(2)
+  export const schema = c.content({
+    primer: c.string(),
+    body: c.markdown(),
+    buttons: c.array(c.button()).max(2)
   });
 </script>
 
@@ -65,7 +62,7 @@
       </div>
 
       <div class="markdown-content space-y-6">
-        {@html body.html}
+        {body}
       </div>
       {#if buttons}
         <div class="flex flex-row flex-wrap place-content-center gap-4">

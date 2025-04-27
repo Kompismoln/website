@@ -21,7 +21,12 @@ import { contentTraverser, inferCommonPath, trimKey } from './utils';
 /* A lazy map of all components expected by content
  */
 let componentMap: ComponentMap;
+
+export let contentResolve: (value?: any) => void;
+
+export const contentReady = new Promise(resolve => { contentResolve = resolve; });
 export const virtualComponentMap: Record<string, string> = {};
+//contentReady.then(() => console.log(virtualComponentMap));
 
 /* Reduce keys to friendly component names like 'Hero' or 'Blog/Post',
  * instead of full paths like:
@@ -47,16 +52,7 @@ export function addVirtualComponent(id: string, source: string) {
 /* How everyone in here should get a component from componentMap
  */
 export const getComponent = async (name: string) => {
-  if (!Object.keys(componentMap).length) {
-    throw new Error(
-      'Component map is empty. Did you forget to call setComponentMap()?'
-    );
-  }
-  if (!(name in componentMap)) {
-    throw new Error(`Component not found: ${name}`);
-  }
-  const component = await componentMap[name]();
-  return component;
+  return name;
 };
 
 /* Get module with props in a neat package
@@ -69,11 +65,8 @@ export const resolveComponent = async (
   content: ComponentContent
 ): Promise<ResolvedComponent> => {
   const { component: name, ...props } = content;
-  if (name.startsWith('virtual:')) {
-    const { vmap } = await import('virtual:component-map');
-    console.log(vmap)
-  }
-  const { default: component } = await getComponent(name);
+
+  const component = await getComponent(name);
   return { component, props };
 };
 
@@ -127,10 +120,6 @@ export const resolvePage = async (page: PageContent) => {
 export const conformComponent = async (
   content: ComponentContent
 ): Promise<ComponentContent> => {
-  if (content.component.startsWith('virtual:')) {
-    return content;
-  }
-
   let { schema } = await getComponent(content.component);
 
   const result = await schema.spa(content);

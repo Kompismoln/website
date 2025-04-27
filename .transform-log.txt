@@ -1,0 +1,19 @@
+[2025-04-27T18:45:25.583Z] 
+          export default {"title":"Blogg","components":[{"component":(await import('/src/lib/components/Hero.svelte')).default,"primer":"kompismoln.se/blog","body":"# Blogg\n","buttons":[{"text":"Berätta mer","url":"/about","primary":true},{"text":"Vad är ?","url":"/tools/nixos","primary":false}]}]};
+        
+[2025-04-27T18:46:59.727Z] 
+          export default {"title":"Blogg","components":[{"component":"Hero","primer":"kompismoln.se/blog","body":"# Blogg\n","buttons":[{"text":"Berätta mer","url":"/about","primary":true},{"text":"Vad är ?","url":"/tools/nixos","primary":false}]}]};
+        
+[2025-04-27T18:47:54.121Z] 
+          export default {
+            'about': () => import('virtual:content/about'),
+'blog': () => import('virtual:content/blog'),
+'': () => import('virtual:content/'),
+'test': () => import('virtual:content/test'),
+'tools': () => import('virtual:content/tools'),
+'tools/nixos': () => import('virtual:content/tools/nixos'),
+'blog/att-bygga-hemsida': () => import('virtual:content/blog/att-bygga-hemsida'),
+'blog/hello-world': () => import('virtual:content/blog/hello-world'),
+'blog/hugo-like-sveltekit-ssg': () => import('virtual:content/blog/hugo-like-sveltekit-ssg')
+          };
+        

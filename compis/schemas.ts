@@ -1,10 +1,9 @@
+import fs from 'node:fs/promises';
 import z from 'zod';
 import { browser } from '$app/environment';
 import type { ComponentContent, PreparedMarkdown, ParsedHtml } from './types';
 import { shortHash } from './utils';
 import { addVirtualComponent } from './component.loader';
-
-export { z };
 
 /**
  * Provides the following utility schemas:
@@ -27,6 +26,74 @@ export { z };
 
 /* Callback for content's transform function
  */
+
+const extensions = {
+  content: (obj: any) => {
+    return z
+      .object({ ...obj, component: z.string() })
+      .strict()
+  },
+
+  markdown: () => {
+    const prepare = (val: string): ComponentContent => {
+      const hash = shortHash(val);
+      const component = `virtual:${hash}`;
+      addVirtualComponent(component, val);
+
+      return { component };
+    };
+    return z.string().transform(prepare).or(c.parsedHtml());
+  },
+
+  parsedHtml: (): z.ZodType<ParsedHtml> =>
+    z.object({
+      html: z.string(),
+      data: z.object({}).passthrough()
+    }),
+
+  component: (allowed: string[] | null = null) => {
+    const component = allowed
+      ? z.enum(allowed as [string, ...string[]])
+      : z.string();
+
+    return z.object({ component }).passthrough();
+  },
+
+  slots: (allowed = null) => z.record(c.component(allowed)),
+image: () =>
+  z.object({
+    src: z.string(),
+    alt: z.string()
+  }),
+
+link: () =>
+  z.object({
+    url: z.string(),
+    text: z.string(),
+    blank: z.boolean().optional()
+  }),
+
+button: () =>
+  z.object({
+    url: z.string(),
+    text: z.string(),
+    fill: z.boolean().optional()
+  }),
+
+social: () =>
+  z.object({
+    url: z.string(),
+    platform: z.enum([
+      'twitter',
+      'facebook',
+      'mastodon',
+      'instagram',
+      'youtube',
+      'bluesky',
+      'tiktok'
+    ])
+  }),
+};
 const process = async (content: ComponentContent) => {
   if (browser) {
     return content;
@@ -44,37 +111,20 @@ const process = async (content: ComponentContent) => {
   return Object.fromEntries(entries);
 };
 
-const content = (obj: any) => {
-  return z
-    .object({ ...obj, component: z.string() })
-    .strict()
-};
 
-const markdown = () => {
-  const prepare = (val: string): ComponentContent => {
-    const hash = shortHash(val);
-    const component = `virtual:${hash}`;
-    addVirtualComponent(component, val);
+export const getSchema = async (component: string) => {
+  const code = await fs.readFile(`src/lib/components/${component}.svelte`, 'utf8');
 
-    return { component };
-  };
-  return z.string().transform(prepare).or(parsedHtml());
-};
+  const match = code.match(/export\s+const\s+schema\s*=\s*(c\.content\(([\s\S]*?)\));/);
 
-const parsedHtml = (): z.ZodType<ParsedHtml> =>
-  z.object({
-    html: z.string(),
-    data: z.object({}).passthrough()
-  });
+  if (!match) {
+    return
+  }
+  const schemaDefinition = match[1];
 
-const component = (allowed: string[] | null = null) => {
-  const component = allowed
-    ? z.enum(allowed as [string, ...string[]])
-    : z.string();
+  return '';
 
-  return z.object({ component }).passthrough();
-};
+}
 
-const slots = (allowed = null) => z.record(component(allowed));
-
-export const ze = { markdown, component, slots, content };
+export const c = extensions;
+export default c;
