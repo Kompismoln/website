@@ -1,10 +1,10 @@
 <script module>
-  import { z, ze } from '../..//schemas';
+  import { c } from '../..//schemas';
 
-  export const schema = ze.content({
-    theme: z.string(),
-    icon: z.string(),
-    text: ze.markdown()
+  export const schema = c.content({
+    theme: c.string(),
+    icon: c.string(),
+    text: c.markdown()
   });
 </script>
 

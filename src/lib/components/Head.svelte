@@ -1,12 +1,12 @@
 <script module>
-  import { z, ze } from 'compis/schemas';
+  import { c } from 'compis/schemas';
 
-  export const schema = ze.content({
-    siteName: z.string(),
-    pageName: z.string().optional(),
-    pagePath: z.string(),
-    siteUrl: z.string(),
-    siteDescription: z.string()
+  export const schema = c.content({
+    siteName: c.string(),
+    pageName: c.string().optional(),
+    pagePath: c.string(),
+    siteUrl: c.string(),
+    siteDescription: c.string()
   });
 </script>
 

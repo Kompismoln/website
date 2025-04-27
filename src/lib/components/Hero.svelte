@@ -1,13 +1,12 @@
 <script module>
-  import { z, ze } from 'compis/schemas';
-  import s from '$lib/components/schemas';
+  import { c } from 'compis/schemas';
 
-  export const schema = ze.content({
-    primer: z.string(),
-    body: ze.markdown({
+  export const schema = c.content({
+    primer: c.string(),
+    body: c.markdown({
       decreaseHeadings: false
     }),
-    buttons: z.array(s.button()).max(2)
+    buttons: c.array(c.button()).max(2)
   });
 </script>
 

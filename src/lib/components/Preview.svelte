@@ -1,10 +1,9 @@
 <script module>
-  import { ze } from 'compis/schemas';
-  import s from '$lib/components/schemas';
+  import { c } from 'compis/schemas';
 
-  export const schema = ze.content({
-    body: ze.markdown(),
-    button: s.button()
+  export const schema = c.content({
+    body: c.markdown(),
+    button: c.button()
   });
 </script>
 

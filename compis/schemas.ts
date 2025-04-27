@@ -2,8 +2,6 @@ import z from 'zod';
 import { browser } from '$app/environment';
 import type { ComponentContent, PreparedMarkdown, ParsedHtml } from './types';
 
-export { z };
-
 /**
  * Provides the following utility schemas:
  *
@@ -22,6 +20,12 @@ export { z };
  *   A z.array with components that should render on the client.
  *
  */
+
+const handler = {
+  get(target: any, prop: string) {
+    return prop in target ? target[prop] : z[prop];
+  }
+};
 
 /* Callback for content's transform function
  */
@@ -42,35 +46,70 @@ const process = async (content: ComponentContent) => {
   return Object.fromEntries(entries);
 };
 
-const content = (obj: any) => {
-  return z
-    .object({ ...obj, component: z.string() })
-    .strict()
-    .transform((val) => process(val as ComponentContent));
+const types = {
+  content: (obj: any) => {
+    return z
+      .object({ ...obj, component: z.string() })
+      .strict()
+      .transform((val) => process(val as ComponentContent));
+  },
+
+  markdown: (options = {}) => {
+    const prepare = (val: string): PreparedMarkdown => ({
+      markdown: val,
+      options
+    });
+    return z.string().transform(prepare).or(types.parsedHtml());
+  },
+
+  parsedHtml: (): z.ZodType<ParsedHtml> =>
+    z.object({
+      html: z.string(),
+      data: z.object({}).passthrough()
+    }),
+
+  component: (allowed: string[] | null = null) => {
+    const component = allowed
+      ? z.enum(allowed as [string, ...string[]])
+      : z.string();
+
+    return z.object({ component }).passthrough();
+  },
+
+  slots: (allowed = null) => z.record(types.component(allowed)),
+  image: () =>
+    z.object({
+      src: z.string(),
+      alt: z.string()
+    }),
+
+  link: () =>
+    z.object({
+      url: z.string(),
+      text: z.string(),
+      blank: z.boolean().optional()
+    }),
+
+  button: () =>
+    z.object({
+      url: z.string(),
+      text: z.string(),
+      fill: z.boolean().optional()
+    }),
+
+  social: () =>
+    z.object({
+      url: z.string(),
+      platform: z.enum([
+        'twitter',
+        'facebook',
+        'mastodon',
+        'instagram',
+        'youtube',
+        'bluesky',
+        'tiktok'
+      ])
+    })
 };
 
-const markdown = (options = {}) => {
-  const prepare = (val: string): PreparedMarkdown => ({
-    markdown: val,
-    options
-  });
-  return z.string().transform(prepare).or(parsedHtml());
-};
-
-const parsedHtml = (): z.ZodType<ParsedHtml> =>
-  z.object({
-    html: z.string(),
-    data: z.object({}).passthrough()
-  });
-
-const component = (allowed: string[] | null = null) => {
-  const component = allowed
-    ? z.enum(allowed as [string, ...string[]])
-    : z.string();
-
-  return z.object({ component }).passthrough();
-};
-
-const slots = (allowed = null) => z.record(component(allowed));
-
-export const ze = { markdown, component, slots, content };
+export const c = new Proxy(types, handler);

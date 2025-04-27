@@ -1,8 +1,8 @@
 <script module>
-  import { ze } from 'compis/schemas';
+  import { c } from 'compis/schemas';
 
-  export const schema = ze.content({
-    body: ze.markdown()
+  export const schema = c.content({
+    body: c.markdown()
   });
 </script>
 

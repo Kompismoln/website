@@ -1,10 +1,10 @@
 <script module>
-  import { z, ze } from 'compis/schemas';
+  import { c } from 'compis/schemas';
 
-  export const schema = ze.content({
-    theme: z.string().optional(),
-    icon: z.string(),
-    text: ze.markdown()
+  export const schema = c.content({
+    theme: c.string().optional(),
+    icon: c.string(),
+    text: c.markdown()
   });
 </script>
 

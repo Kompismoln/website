@@ -1,14 +1,14 @@
 <script module>
-  import { z, ze } from 'compis/schemas';
+  import { c } from 'compis/schemas';
 
-  export const schema = ze.content({
-    title: z.string(),
-    h1: z.string().optional(),
-    body: ze.markdown(),
-    date: z.date(),
-    dateString: z.string().optional(),
-    author: ze.component(['Author']),
-    slots: ze.slots().optional()
+  export const schema = c.content({
+    title: c.string(),
+    h1: c.string().optional(),
+    body: c.markdown(),
+    date: c.date(),
+    dateString: c.string().optional(),
+    author: c.component(['Author']),
+    slots: c.slots().optional()
   });
 </script>
 

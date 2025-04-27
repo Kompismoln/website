@@ -1,9 +1,9 @@
 <script module>
-  import { z, ze } from 'compis/schemas';
+  import { c } from 'compis/schemas';
 
-  export const schema = ze.content({
-    intro: ze.component(['Blurb']),
-    items: z.array(ze.component(['Card']))
+  export const schema = c.content({
+    intro: c.component(['Blurb']),
+    items: c.array(c.component(['Card']))
   });
 </script>
 

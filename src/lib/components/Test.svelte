@@ -1,9 +1,9 @@
 <script module>
-  import { z, ze } from 'compis/schemas';
+  import { c } from 'compis/schemas';
 
-  export const schema = ze.content({
-    test: z.string(),
-    body: ze.markdown()
+  export const schema = c.content({
+    test: c.string(),
+    body: c.markdown()
   });
 </script>
 

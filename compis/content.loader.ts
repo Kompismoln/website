@@ -180,3 +180,17 @@ export const discoverContentPaths = () => {
       })
   );
 };
+
+export const loadContent = async(searchPath: string) => {
+  searchPath = searchPath === '' ? config.indexFile : searchPath;
+
+  let page = await findPageContent(searchPath);
+
+  page = await contentTraverser({
+    obj: page,
+    filter: (obj) => Object.keys(obj).some((key: string) => key[0] === '_'),
+    callback: parseFragment
+  });
+
+  return page;
+};

@@ -1,12 +1,11 @@
 <script module>
-  import { z, ze } from 'compis/schemas';
-  import s from '$lib/components/schemas';
+  import { c } from 'compis/schemas';
 
-  export const schema = ze.content({
-    logo: s.image(),
-    searchPage: z.union([z.boolean(), z.string()]),
-    menu: z.array(s.link()).max(4),
-    themes: z.array(z.number())
+  export const schema = c.content({
+    logo: c.image(),
+    searchPage: c.union([c.boolean(), c.string()]),
+    menu: c.array(c.link()).max(4),
+    themes: c.array(c.number())
   });
 </script>
 

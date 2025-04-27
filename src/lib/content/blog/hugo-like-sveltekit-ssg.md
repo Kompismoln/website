@@ -1,5 +1,5 @@
 ---
-title: "Dev diary: Content-first SSG in SvelteKit"
+title: 'Dev diary: Content-first SSG in SvelteKit'
 component: Blog/Post
 date: 2025-04-20
 dateString: Written April 20, 2025
@@ -192,7 +192,6 @@ like with Hugo. And now that all components can present themselves to the
 server properly, they can be specified in content instead of code.
 
 - [x] Content-first
-
 
 :::slot{#simple-internet}
 
