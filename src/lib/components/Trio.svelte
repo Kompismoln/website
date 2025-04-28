@@ -16,7 +16,7 @@
     class="mx-auto grid max-w-screen-lg grid-cols-1 overflow-x-auto md:grid-cols-3"
   >
     {#each panes as pane}
-      <pane.component {...pane.props} />
+      <pane.component {...pane} />
     {/each}
   </div>
 </div>

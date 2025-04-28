@@ -5,8 +5,9 @@ import fs from 'node:fs/promises';
 import { globSync } from 'node:fs';
 import path from 'node:path';
 import { redirect } from '@sveltejs/kit';
+import { getSchema } from './schemas';
 
-import type { PageContent } from './types';
+import type { PageContent, ComponentContent } from './types';
 import { conformComponent } from './component.loader';
 import config from './config';
 import { contentTraverser } from './utils';
@@ -181,7 +182,7 @@ export const discoverContentPaths = () => {
   );
 };
 
-export const loadContent = async(searchPath: string) => {
+export const loadContent = async (searchPath: string) => {
   searchPath = searchPath === '' ? config.indexFile : searchPath;
 
   let page = await findPageContent(searchPath);
@@ -192,5 +193,30 @@ export const loadContent = async(searchPath: string) => {
     callback: parseFragment
   });
 
+  page = await contentTraverser({
+    obj: page,
+    filter: (obj) => 'component' in obj,
+    callback: validateAndTransformComponent
+  });
+
   return page;
+};
+
+export const validateAndTransformComponent = async (
+  content: ComponentContent
+): Promise<ComponentContent> => {
+  let schema = await getSchema(content.component);
+
+  if (!schema?.spa) {
+    return content;
+  }
+
+  const result = await schema.spa(content);
+
+  if (!result.success) {
+    throw new Error(
+      `Component '${content.component}' failed validation: ${result.error.message}`
+    );
+  }
+  return result.data;
 };

@@ -49,7 +49,7 @@
     >
       {#each slides as slide}
         <swiper-slide class="flex items-center justify-center">
-          <slide.component {...slide.props} />
+          <slide.component {...slide} />
         </swiper-slide>
       {/each}
     </swiper-container>

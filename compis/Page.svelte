@@ -6,10 +6,10 @@
 </script>
 
 {#if page.component}
-  <page.component {...page.props} />
+  <page.component {...page} />
 {/if}
 {#if page.components}
   {#each page.components as component}
-    <component.component {...component.props} />
+    <component.component {...component} />
   {/each}
 {/if}

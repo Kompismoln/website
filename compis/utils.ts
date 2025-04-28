@@ -89,3 +89,10 @@ export const trimKey = (
     ])
   );
 };
+
+export const shortHash = (str: string) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++)
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+  return ('0000' + (hash >>> 0).toString(36)).slice(-4);
+};

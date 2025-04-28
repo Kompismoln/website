@@ -32,11 +32,11 @@
     </header>
 
     <section class="space-y-6">
-      {@render body.snippet({ author })}
+      {@html body.html}
     </section>
 
     <section class="mt-8 flex items-center border-t pt-6">
-      <author.component {...author.props} />
+      <author.component {...author} />
     </section>
   </article>
 </div>

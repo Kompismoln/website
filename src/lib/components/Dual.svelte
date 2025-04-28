@@ -26,7 +26,7 @@
         class="mt-6 flex flex-col place-content-center content-center gap-6 lg:flex-row"
       >
         {#each panes as pane}
-          <pane.component {...pane.props} />
+          <pane.component {...pane} />
         {/each}
       </div>
     </div>

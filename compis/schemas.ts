@@ -1,6 +1,7 @@
+import fs from 'node:fs/promises';
 import z from 'zod';
-import { browser } from '$app/environment';
 import type { ComponentContent, PreparedMarkdown, ParsedHtml } from './types';
+const browser = false;
 
 /**
  * Provides the following utility schemas:
@@ -113,3 +114,16 @@ const types = {
 };
 
 export const c = new Proxy(types, handler);
+
+
+export const getSchema = async (component: string) => {
+  const code = await fs.readFile(`src/lib/components/${component}.svelte`, 'utf8');
+  const match = code.match(/export\s+const\s+schema\s*=\s*(c\.content\(([\s\S]*?)\));/);
+    if (!match) {
+    return
+  }
+  const schemaDefinition = match[1];
+
+  const schema = new Function('c', `return ${schemaDefinition}`)(c);
+  return schema;
+}

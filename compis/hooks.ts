@@ -12,12 +12,12 @@ import { browser } from '$app/environment';
 export function mountSlots(slots: Record<string, ResolvedComponent>) {
   if (browser) {
     for (const key in slots) {
-      const { component, props } = slots[key];
+      const slot = slots[key];
       const target = document.querySelector(`[data-slot="${key}"]`);
 
       if (target) {
         target.innerHTML = '';
-        hydrate(component, { target, props });
+        hydrate(slot.component, { target, props: slot });
       }
     }
   }

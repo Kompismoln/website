@@ -4,7 +4,6 @@ import { discoverContentPaths, loadContent } from './content.loader';
 export default async function composably(
   options: Record<string, string>
 ): Promise<Plugin> {
-
   return {
     name: 'svelte-composably',
 
@@ -21,7 +20,7 @@ export default async function composably(
         const path = id.slice('virtual:content/'.length);
         const page = await loadContent(path);
 
-        let code = ` export default async () => (${JSON.stringify(page)}); `;
+        let code = `export default async () => (${JSON.stringify(page)});`;
 
         code = code.replace(
           /"component":"([^"]+)"/g,
