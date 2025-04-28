@@ -64,7 +64,7 @@
       </div>
 
       <div class="markdown-content space-y-6">
-        {@html body.html}
+        <body.component {...body} />
       </div>
       {#if buttons}
         <div class="flex flex-row flex-wrap place-content-center gap-4">

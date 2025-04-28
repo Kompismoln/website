@@ -195,7 +195,7 @@ export const loadContent = async (searchPath: string) => {
 
   page = await contentTraverser({
     obj: page,
-    filter: (obj) => 'component' in obj,
+    filter: (obj) => 'component' in obj && !obj.component.startsWith('composably:'),
     callback: validateAndTransformComponent
   });
 

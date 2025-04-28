@@ -1,6 +1,8 @@
 import fs from 'node:fs/promises';
 import z from 'zod';
 import type { ComponentContent, PreparedMarkdown, ParsedHtml } from './types';
+import { shortHash } from './utils';
+
 const browser = false;
 
 /**
@@ -56,9 +58,9 @@ const types = {
   },
 
   markdown: (options = {}) => {
-    const prepare = (val: string): PreparedMarkdown => ({
-      markdown: val,
-      options
+    const prepare = (val: string): ComponentContent => ({
+      component: `composably:component/${shortHash(val)}`,
+      options,
     });
     return z.string().transform(prepare).or(types.parsedHtml());
   },
