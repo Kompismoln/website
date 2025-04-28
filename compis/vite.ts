@@ -1,8 +1,24 @@
 import type { Plugin } from 'vite';
+import { discoverContentPaths, loadContent, findVirtualComponents } from './content.loader';
 import type { PageContent, ComponentContent } from './types';
 
 let entries: string[];
+const getEntries = (refresh = false) => {
+  if (refresh || !entries) {
+    entries = discoverContentPaths();
+  }
+  return entries;
+}
+
 let content: Record<string, Promise<PageContent>>;
+const getContent = (refresh = false) => {
+  if (refresh || !content) {
+    entries = discoverContentPaths();
+    content = Object.fromEntries(getEntries().map((p) => [p, loadContent(p)]));
+  }
+  return content;
+}
+
 let virtualComponents: Record<string, ComponentContent> = {};
 
 export default async function composably(
@@ -13,14 +29,10 @@ export default async function composably(
     enforce: 'pre',
 
     async buildStart() {
-      const { discoverContentPaths, loadContent, findVirtualComponents } =
-        await import('./content.loader');
 
-      entries = discoverContentPaths();
-      content = Object.fromEntries(entries.map((p) => [p, loadContent(p)]));
 
-      for (const p of entries) {
-        const comps = await findVirtualComponents(await content[p]);
+      for (const p of getEntries()) {
+        const comps = await findVirtualComponents(await getContent()[p]);
         Object.assign(virtualComponents, comps);
       }
     },
@@ -29,13 +41,13 @@ export default async function composably(
       if (id === 'composably:content') {
         const tpl = (p: string) =>
           `'${p}': () => import('composably:content/${p}')`;
-        const code = `export default { ${entries.map(tpl).join(',\n')} }; `;
+        const code = `export default { ${getEntries().map(tpl).join(',\n')} }; `;
         return code;
       }
 
       if (id.startsWith('composably:content/')) {
         const path = id.slice('composably:content/'.length);
-        const page = await content[path];
+        const page = await getContent()[path];
 
         let code = `export default async () => (${JSON.stringify(page)});`;
 
