@@ -30,22 +30,27 @@ const handler = {
   }
 };
 
-/* Callback for content's transform function
- */
 const process = async (content: ComponentContent) => {
-  if (browser) {
-    return content;
-  }
-  const parse = (await import('./markdown')).parse;
-  const isPreparedMarkdown = (val: unknown): val is PreparedMarkdown => {
-    return !!val && typeof val === 'object' && 'markdown' in val;
+  const isVirtualComponent = (prop: any): prop is ComponentContent => {
+    return (
+      !!prop &&
+      typeof prop === 'object' &&
+      'component' in prop &&
+      typeof prop.component === 'string' &&
+      prop.component.startsWith('composably:')
+    );
   };
 
-  const entries = await Promise.all(
-    Object.entries(content).map(async ([key, val]) =>
-      isPreparedMarkdown(val) ? [key, await parse(val)] : [key, val]
-    )
-  );
+  const { component, ...props } = content;
+
+  const entries = Object.entries(content).map(([key, val]) => {
+    if (isVirtualComponent(val)) {
+      delete props[key];
+      val.parent = props;
+    }
+    return [key, val];
+  });
+
   return Object.fromEntries(entries);
 };
 
@@ -60,7 +65,8 @@ const types = {
   markdown: (options = {}) => {
     const prepare = (val: string): ComponentContent => ({
       component: `composably:component/${shortHash(val)}`,
-      options,
+      markdown: val,
+      options
     });
     return z.string().transform(prepare).or(types.parsedHtml());
   },
@@ -117,15 +123,19 @@ const types = {
 
 export const c = new Proxy(types, handler);
 
-
 export const getSchema = async (component: string) => {
-  const code = await fs.readFile(`src/lib/components/${component}.svelte`, 'utf8');
-  const match = code.match(/export\s+const\s+schema\s*=\s*(c\.content\(([\s\S]*?)\));/);
-    if (!match) {
-    return
+  const code = await fs.readFile(
+    `src/lib/components/${component}.svelte`,
+    'utf8'
+  );
+  const match = code.match(
+    /export\s+const\s+schema\s*=\s*(c\.content\(([\s\S]*?)\));/
+  );
+  if (!match) {
+    return;
   }
   const schemaDefinition = match[1];
 
   const schema = new Function('c', `return ${schemaDefinition}`)(c);
   return schema;
-}
+};

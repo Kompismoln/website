@@ -195,7 +195,8 @@ export const loadContent = async (searchPath: string) => {
 
   page = await contentTraverser({
     obj: page,
-    filter: (obj) => 'component' in obj && !obj.component.startsWith('composably:'),
+    filter: (obj) =>
+      'component' in obj && !obj.component.startsWith('composably:'),
     callback: validateAndTransformComponent
   });
 
@@ -219,4 +220,29 @@ export const validateAndTransformComponent = async (
     );
   }
   return result.data;
+};
+
+export const findVirtualComponents = async (page: PageContent) => {
+  let virtualComponents: Record<string, ComponentContent> = {};
+
+  page = await contentTraverser({
+    obj: page,
+    filter: (obj) =>
+      'component' in obj && obj.component.startsWith('composably:'),
+    callback: async (obj) => {
+      virtualComponents[obj.component] = await processVirtualComponent(obj);
+      return obj;
+    }
+  });
+
+  return virtualComponents;
+};
+
+const processVirtualComponent = async (content: ComponentContent) => {
+  const parse = (await import('./markdown')).parse;
+  if ('markdown' in content) {
+    const parsedContent = await parse(content)
+    return parsedContent;
+  };
+  return content
 };

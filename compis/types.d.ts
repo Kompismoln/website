@@ -67,6 +67,8 @@ declare module 'vfile' {
         decreaseHeadings?: boolean;
       };
     };
-    headings?: any[];
+    props?: {
+      headings?: any[];
+    };
   }
 }

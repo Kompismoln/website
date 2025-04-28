@@ -38,7 +38,7 @@ import {
   defListHastHandlers
 } from './unified-plugins/definitionList';
 
-import type { PreparedMarkdown } from './types';
+import type { ComponentContent } from './types';
 
 /* Take a prepared markdown object and return a { html, data } object.
  *
@@ -49,11 +49,11 @@ import type { PreparedMarkdown } from './types';
  * Functionality buds here and moves to unified-plugins when worthy.
  * This will surely crystallize over time.
  */
-export const parse = async (preparedMarkdown: PreparedMarkdown) => {
+export const parse = async (content: ComponentContent) => {
   try {
     const result = await unified()
       .use(() => (_, vfile: VFile) => {
-        vfile.data.meta = { options: preparedMarkdown.options };
+        vfile.data.meta = { options: content.options };
       })
       .use(remarkParse)
       .use(emoji, { accessible: true })
@@ -81,16 +81,23 @@ export const parse = async (preparedMarkdown: PreparedMarkdown) => {
 
       .use(rehypeStringify)
 
-      .process(preparedMarkdown.markdown);
+      .process(content.markdown as string);
 
-    delete result.data.meta;
-    return {
-      html: String(result.value),
-      data: result.data
-    };
+    content.body = String(result.value);
+    delete content.markdown;
+    Object.keys(result.data.props || {}).forEach(key => {
+      content[key] = result.data.props[key];
+    });
+    Object.keys(content.parent || {}).forEach(key => {
+      content[key] = content.parent[key];
+    });
+    delete content.parent;
+
+    return content;
+
   } catch (error: any) {
     throw new Error(
-      `Failed to parse input: "${preparedMarkdown.markdown.slice(0, 50)}" - ${error}`
+      `Failed to parse input: "${content.markdown.slice(0, 50)}" - ${error}`
     );
   }
 };

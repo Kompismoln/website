@@ -23,7 +23,8 @@ export default function parseHeadings() {
         node.depth++;
       }
     });
-    file.data.headings = headings;
+    file.data.props ??= {};
+    file.data.props.headings = headings;
   };
 }
 
