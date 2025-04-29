@@ -6,10 +6,10 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    include: ['compis/**/*.{test,spec}.{js,ts}'],
+    include: ['composably/**/*.{test,spec}.{js,ts}'],
     deps: { optimizer: { web: { include: ['@sveltejs/kit'] } } }
   },
   typecheck: {
-    tsconfig: 'compis/test/tsconfig.test.json'
+    tsconfig: 'composably/test/tsconfig.test.json'
   }
 });

@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import z from 'zod';
-import type { ComponentContent, ParsedHtml } from './types';
+import type { ComponentContent } from './types';
 import { shortHash } from './utils';
 
 /**
@@ -13,9 +13,6 @@ import { shortHash } from './utils';
  * - component
  *   An enumeration of component names that will be imported and
  *   made available under the property name.
- *
- * - markdown
- *   A z.string that is transformed to a PreparedMarkdown object.
  *
  * - slots
  *   A z.array with components that should render on the client.
@@ -74,14 +71,8 @@ const types = {
       markdown: val,
       options
     });
-    return z.string().transform(prepare).or(types.parsedHtml());
+    return z.string().transform(prepare).or(types.content({}));
   },
-
-  parsedHtml: (): z.ZodType<ParsedHtml> =>
-    z.object({
-      html: z.string(),
-      data: z.object({}).passthrough()
-    }),
 
   component: (allowed: string[] | null = null) => {
     const component = allowed

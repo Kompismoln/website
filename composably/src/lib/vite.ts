@@ -1,10 +1,6 @@
 import type { Plugin } from 'vite';
-import {
-  discoverContentPaths,
-  loadContent,
-} from './content.loader';
+import { discoverContentPaths, loadContent, setConfig } from './content.loader';
 import type { PageContent, ComponentContent } from './types';
-
 
 let entries: string[];
 const getEntries = (refresh = false) => {
@@ -33,13 +29,16 @@ const getContent = (refresh = false) => {
   return content;
 };
 
-
 export default async function composably(
   options: Record<string, string>
 ): Promise<Plugin> {
   return {
     name: 'svelte-composably',
     enforce: 'pre',
+
+    async buildStart() {
+      setConfig(options);
+    },
 
     async load(id, opts) {
       if (id === 'composably:content') {

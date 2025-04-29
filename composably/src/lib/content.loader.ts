@@ -4,73 +4,16 @@ import fs from 'node:fs/promises';
 
 import { globSync } from 'node:fs';
 import path from 'node:path';
-import { redirect } from '@sveltejs/kit';
 import { getSchema } from './schemas';
 
-import type { PageContent, ComponentContent } from './types';
-import { conformComponent } from './component.loader';
-import config from './config';
+import type { ComponentContent, Config } from './types';
 import { contentTraverser } from './utils';
 
 const filetypes = ['js', 'ts', 'json', 'yaml', 'yml', 'md'];
-
-/**
- * The Page Content Loader.
- *
- * Takes a path, returns a server rendered page:
- * - Infer a filePath from the searchPath
- * - Find and parse the file
- * - Resolve fragments
- * - Validate and transform all components
- * - Throw meaningful errors along the way
- *
- *
- * Where 404?
- * I'm not sure it's needed. This only runs on build and 404's obscured
- * my stacktraces. They weren't even working on the client in build, probably
- * because this function doesn't run there 🤔
- *
- */
-export const loadPageContent = async (searchPath: string) => {
-  // This redirect has no effect in production, handle redirects on webserver instead
-  if (searchPath === config.indexFile) throw redirect(301, '/');
-
-  // Rename site root to index file
-  searchPath = searchPath === '' ? config.indexFile : searchPath;
-
-  // Find page or throw
-  let page = await findPageContent(searchPath);
-
-  try {
-    page = await processPage(page);
-  } catch (error: any) {
-    throw new Error(
-      `Failed to process page '${searchPath}': ${error.message || error}`
-    );
-  }
-
-  return page;
-};
-
-/* Recurse in content tree and
- * - Replace all fragments with data from file
- * - Validate & transform all components
- */
-export const processPage = async (page: PageContent): Promise<PageContent> => {
-  page = await contentTraverser({
-    obj: page,
-    filter: (obj) => Object.keys(obj).some((key: string) => key[0] === '_'),
-    callback: parseFragment
-  });
-
-  page = await contentTraverser({
-    obj: page,
-    filter: (obj) => 'component' in obj,
-    callback: conformComponent
-  });
-
-  return page;
-};
+export let config: Config;
+export const setConfig = (newConfig: Config) => {
+  config = newConfig;
+}
 
 /* Probe all filetypes in content root for search path.
  */

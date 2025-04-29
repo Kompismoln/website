@@ -44,10 +44,6 @@ import type { ComponentContent } from './types';
  *
  * This function should really have a return type.
  * Why doesnt the linter complain?
- * Let's infer from parsedHtml (in schemas.ts) some day.
- *
- * Functionality buds here and moves to unified-plugins when worthy.
- * This will surely crystallize over time.
  */
 export const parse = async (content: ComponentContent) => {
   try {
@@ -84,8 +80,9 @@ export const parse = async (content: ComponentContent) => {
       .process(content.markdown as string);
 
     content.html = String(result.value).replace(
-  /<svelte-component data-slot="([^"]+)"([^>]*)><\/svelte-component>/g, 
-  '<slots.$1.component {...slots.$1} />');
+      /<svelte-component data-slot="([^"]+)"([^>]*)><\/svelte-component>/g,
+      '<slots.$1.component {...slots.$1} />'
+    );
 
     delete content.markdown;
     Object.keys(result.data.props || {}).forEach((key) => {

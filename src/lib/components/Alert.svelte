@@ -1,5 +1,5 @@
 <script module>
-  import { c } from 'compis/schemas';
+  import { c } from 'composably/schemas';
 
   export const schema = c.content({
     theme: c.string().optional(),
