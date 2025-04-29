@@ -5,4 +5,4 @@ test: asdf
 
 # test
 
-this is a test page
+this {'{'} is a test page

@@ -1,11 +1,8 @@
-import composably from './compis/vite';
+import composably from './composably/src/lib/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
-
-const composablyOptions = {
-  componentRoot: '/src/lib/components/'
-};
+import config from './src/lib/config';
 
 export default defineConfig({
   server: {
@@ -15,8 +12,8 @@ export default defineConfig({
     host: '0.0.0.0',
     allowedHosts: true,
     fs: {
-      allow: ['compis']
+      allow: ['composably']
     }
   },
-  plugins: [composably(composablyOptions), tailwindcss(), sveltekit()]
+  plugins: [composably(config.composably), tailwindcss() ]
 });

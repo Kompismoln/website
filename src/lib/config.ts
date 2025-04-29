@@ -27,5 +27,10 @@ export default {
     { platform: 'bluesky', url: 'http://example.com' },
     { platform: 'tiktok', url: 'http://example.com' },
     { platform: 'mastodon', url: 'http://example.com' }
-  ]
+  ],
+  composably: {
+    componentRoot: 'src/lib/components',
+    contentRoot: 'src/lib/content',
+    indexFile: 'index'
+  }
 };

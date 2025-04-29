@@ -5,7 +5,7 @@ const config = {
   preprocess: vitePreprocess(),
   kit: {
     alias: {
-      compis: 'compis' // /compis is a budding module
+      composably: 'composably/src/lib'
     },
     adapter: adapter()
   }

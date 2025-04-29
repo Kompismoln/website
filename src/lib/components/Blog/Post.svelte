@@ -1,5 +1,5 @@
 <script module>
-  import { c } from 'compis/schemas';
+  import { c } from 'composably/schemas';
 
   export const schema = c.content({
     title: c.string(),
@@ -13,7 +13,7 @@
 </script>
 
 <script lang="ts">
-  import { mountSlots } from 'compis/hooks';
+  import { mountSlots } from 'composably/hooks';
 
   let { title, h1, date, dateString, body, author, slots } = $props();
 
@@ -60,7 +60,6 @@
     }
   }
   :global .alert {
-    @reference "tailwindcss";
     @apply my-2 md:my-12;
   }
   :global ul {

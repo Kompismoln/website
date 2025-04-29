@@ -1,6 +1,12 @@
 import type { ComponentType } from 'svelte';
 import type { ZodObject } from 'zod';
 
+export interface Config {
+  componentRoot: string;
+  contentRoot: string;
+  indexFile: string;
+}
+
 export interface Fragment {
   [key: string]: unknown;
 }
@@ -53,11 +59,6 @@ export type PreparedMarkdown = {
   options: Record<string, any>;
 };
 
-export type ParsedHtml = {
-  html: string;
-  data: Record<string, unknown>;
-};
-
 import 'vfile';
 
 declare module 'vfile' {
@@ -67,6 +68,12 @@ declare module 'vfile' {
         decreaseHeadings?: boolean;
       };
     };
-    headings?: any[];
+    props?: {
+      headings?: any[];
+    };
   }
+}
+declare module 'composably:content' {
+  const content: any;
+  export default content;
 }
