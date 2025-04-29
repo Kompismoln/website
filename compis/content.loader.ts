@@ -128,25 +128,37 @@ export const parseFile = async (filePath: string): Promise<any> => {
  * trouble some day lol)
  */
 export const parseFragment = async (obj: any) => {
-  const keys = Object.keys(obj);
-
-  if (keys.includes('_')) {
-    const fragment = await parseFile(path.join(config.contentRoot, obj._));
-    delete obj._;
-    Object.assign(obj, fragment);
+  if (
+    !obj ||
+    typeof obj !== 'object' ||
+    Array.isArray(obj) ||
+    Object.keys(obj).length < 1
+  ) {
+    return obj;
   }
 
+  let result = { ...obj };
+
+  if ('_' in obj) {
+    let fragment = await parseFile(path.join(config.contentRoot, obj._));
+    fragment = await parseFragment(fragment);
+    result = { ...fragment, ...result };
+    delete result._;
+  }
+
+  const keys = Object.keys(result);
   const refs = keys.filter((key) => key[0] === '_');
 
-  if (refs.length === 0) return obj;
+  if (refs.length === 0) return result;
 
   for (const ref of refs) {
-    const fragment = await parseFile(path.join(config.contentRoot, obj[ref]));
-    delete obj[ref];
-    obj[ref.slice(1)] = fragment;
+    let fragment = await parseFile(path.join(config.contentRoot, result[ref]));
+    fragment = await parseFragment(fragment);
+    delete result[ref];
+    result = { [ref.slice(1)]: fragment, ...result };
   }
 
-  return obj;
+  return result;
 };
 
 /* Discover entries for sveltekit
@@ -176,13 +188,16 @@ export const discoverContentPaths = () => {
         const p = path.join(dir, name);
         const entry = p === config.indexFile ? '' : p;
 
-        console.info(`Adding entry: '${entry}'`);
+        //console.info(`Adding entry: '${entry}'`);
         return entry;
       })
   );
 };
 
-export const loadContent = async (searchPath: string) => {
+export const loadContent = async (
+  searchPath: string,
+  virtualComponents: (v: ComponentContent) => void
+) => {
   searchPath = searchPath === '' ? config.indexFile : searchPath;
 
   let page = await findPageContent(searchPath);
@@ -195,9 +210,22 @@ export const loadContent = async (searchPath: string) => {
 
   page = await contentTraverser({
     obj: page,
-    filter: (obj) =>
-      'component' in obj && !obj.component.startsWith('composably:'),
+    filter: (obj) => {
+      return 'component' in obj && !obj.component.startsWith('composably:');
+    },
     callback: validateAndTransformComponent
+  });
+
+  page = await contentTraverser({
+    obj: page,
+    filter: (obj) =>
+      'component' in obj && obj.component.startsWith('composably:'),
+    callback: async (obj) => {
+      const vComp = await processVirtualComponent(obj);
+      obj = { ...obj, ...vComp };
+      virtualComponents(obj);
+      return obj;
+    }
   });
 
   return page;
@@ -222,27 +250,11 @@ export const validateAndTransformComponent = async (
   return result.data;
 };
 
-export const findVirtualComponents = async (page: PageContent) => {
-  let virtualComponents: Record<string, ComponentContent> = {};
-
-  page = await contentTraverser({
-    obj: page,
-    filter: (obj) =>
-      'component' in obj && obj.component.startsWith('composably:'),
-    callback: async (obj) => {
-      virtualComponents[obj.component] = await processVirtualComponent(obj);
-      return obj;
-    }
-  });
-
-  return virtualComponents;
-};
-
 const processVirtualComponent = async (content: ComponentContent) => {
   const parse = (await import('./markdown')).parse;
   if ('markdown' in content) {
-    const parsedContent = await parse(content)
+    const parsedContent = await parse(content);
     return parsedContent;
-  };
-  return content
+  }
+  return content;
 };

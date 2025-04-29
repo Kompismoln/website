@@ -20,12 +20,13 @@ export const contentTraverser: ContentTraverser<any> = async ({
       return obj;
     }
 
+    let newObj = obj;
     if (filter(obj)) {
-      obj = await callback(obj);
+      newObj = await callback(obj);
     }
 
-    obj = await Promise.all(
-      Object.entries(obj).map(async ([key, item]) => {
+    newObj = await Promise.all(
+      Object.entries(newObj).map(async ([key, item]) => {
         const newItem = await contentTraverser({
           obj: item,
           filter,
@@ -36,7 +37,7 @@ export const contentTraverser: ContentTraverser<any> = async ({
       })
     );
 
-    return Object.fromEntries(obj);
+    return Object.fromEntries(newObj);
   }
   return obj;
 };

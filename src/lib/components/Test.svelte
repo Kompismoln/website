@@ -8,7 +8,8 @@
 </script>
 
 <script>
-  let { test } = $props();
+  let { test, body } = $props();
 </script>
 
 <h1>{test}</h1>
+<body.component {...body} />

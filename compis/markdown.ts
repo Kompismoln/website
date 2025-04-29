@@ -83,18 +83,20 @@ export const parse = async (content: ComponentContent) => {
 
       .process(content.markdown as string);
 
-    content.body = String(result.value);
+    content.html = String(result.value).replace(
+  /<svelte-component data-slot="([^"]+)"([^>]*)><\/svelte-component>/g, 
+  '<slots.$1.component {...slots.$1} />');
+
     delete content.markdown;
-    Object.keys(result.data.props || {}).forEach(key => {
+    Object.keys(result.data.props || {}).forEach((key) => {
       content[key] = result.data.props[key];
     });
-    Object.keys(content.parent || {}).forEach(key => {
+    Object.keys(content.parent || {}).forEach((key) => {
       content[key] = content.parent[key];
     });
     delete content.parent;
 
     return content;
-
   } catch (error: any) {
     throw new Error(
       `Failed to parse input: "${content.markdown.slice(0, 50)}" - ${error}`

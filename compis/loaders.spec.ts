@@ -3,12 +3,41 @@ import path from 'node:path';
 import { globSync } from 'node:fs';
 import { setComponentMap, getComponent } from './component.loader';
 import { inferCommonPath } from './utils';
+import { parseFragment } from './content.loader';
 
 setComponentMap({
   'Basic.svelte': () => import('./test/components/Basic.svelte'),
   'WithSchema.svelte': () => import('./test/components/WithSchema.svelte')
 });
 
+describe('fragments', () => {
+  it('attaches fragments', async () => {
+    let obj = {};
+    obj = { _: 'test/_test-0.yaml' };
+    obj = await parseFragment(obj);
+    expect(obj).deep.equal({});
+
+    obj = { _test: 'test/_test-0.yaml' };
+    obj = await parseFragment(obj);
+    expect(obj.test).toBeUndefined();
+
+    obj = { _: 'test/_test-1.yaml' };
+    obj = await parseFragment(obj);
+    expect(obj.foo).eq('bar');
+
+    obj = { _test: 'test/_test-1.yaml' };
+    obj = await parseFragment(obj);
+    expect(obj.test.foo).eq('bar');
+
+    obj = { _: 'test/_test-2.yaml' };
+    obj = await parseFragment(obj);
+    expect(obj.test2.foo).eq('bar');
+
+    obj = { _test: 'test/_test-2.yaml' };
+    obj = await parseFragment(obj);
+    expect(obj.test.test2.foo).eq('bar');
+  });
+});
 describe('components', () => {
   it('infers component root correctly', () => {
     const paths = [

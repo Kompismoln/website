@@ -1,6 +1,10 @@
 import type { Plugin } from 'vite';
-import { discoverContentPaths, loadContent, findVirtualComponents } from './content.loader';
+import {
+  discoverContentPaths,
+  loadContent,
+} from './content.loader';
 import type { PageContent, ComponentContent } from './types';
+
 
 let entries: string[];
 const getEntries = (refresh = false) => {
@@ -8,18 +12,27 @@ const getEntries = (refresh = false) => {
     entries = discoverContentPaths();
   }
   return entries;
-}
+};
 
 let content: Record<string, Promise<PageContent>>;
+let virtualComponents: Record<string, ComponentContent> = {};
 const getContent = (refresh = false) => {
   if (refresh || !content) {
     entries = discoverContentPaths();
-    content = Object.fromEntries(getEntries().map((p) => [p, loadContent(p)]));
+    content = Object.fromEntries(
+      getEntries(refresh).map((p) => {
+        return [
+          p,
+          loadContent(p, (c) => {
+            virtualComponents[c.component] = c;
+          })
+        ];
+      })
+    );
   }
   return content;
-}
+};
 
-let virtualComponents: Record<string, ComponentContent> = {};
 
 export default async function composably(
   options: Record<string, string>
@@ -28,16 +41,7 @@ export default async function composably(
     name: 'svelte-composably',
     enforce: 'pre',
 
-    async buildStart() {
-
-
-      for (const p of getEntries()) {
-        const comps = await findVirtualComponents(await getContent()[p]);
-        Object.assign(virtualComponents, comps);
-      }
-    },
-
-    async load(id) {
+    async load(id, opts) {
       if (id === 'composably:content') {
         const tpl = (p: string) =>
           `'${p}': () => import('composably:content/${p}')`;
@@ -62,12 +66,15 @@ export default async function composably(
       if (id.startsWith('composably:component')) {
         const path = id.slice(0, -'.svelte'.length);
         const content = virtualComponents[path];
+
         const { component, ...props } = content;
         const propString = `{ ${Object.keys(props).join(', ')} }`;
-        const scriptString = `<script>\n  let ${propString} = $props();\n</script>`;
+        const scriptString = `<script>\nlet ${propString} = $props();\n</script>\n`;
 
-        return 'asdf';
-        return `${scriptString}${content.body}`;
+        return `
+          ${scriptString}
+          {@html html}
+        `;
       }
     },
 
@@ -75,6 +82,30 @@ export default async function composably(
       if (source.startsWith('composably:')) {
         return source;
       }
+    },
+
+    async handleHotUpdate({ file, modules, server }) {
+      getContent(true);
+
+      const contentFiles = new Set(modules.map((m) => m.id || ''));
+
+      const modulesToRefresh = [];
+
+      if (contentFiles.has('composably:content')) {
+        modulesToRefresh.push(
+          ...server.moduleGraph.getModuleById('composably:content')
+        );
+      }
+
+      for (const entry of getEntries()) {
+        const contentModuleId = `composably:content/${entry}`;
+        const mod = server.moduleGraph.getModuleById(contentModuleId);
+        if (mod) {
+          modulesToRefresh.push(mod);
+        }
+      }
+
+      return modulesToRefresh.filter(Boolean);
     }
   };
 }

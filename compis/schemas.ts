@@ -1,9 +1,7 @@
 import fs from 'node:fs/promises';
 import z from 'zod';
-import type { ComponentContent, PreparedMarkdown, ParsedHtml } from './types';
+import type { ComponentContent, ParsedHtml } from './types';
 import { shortHash } from './utils';
-
-const browser = false;
 
 /**
  * Provides the following utility schemas:
@@ -57,9 +55,17 @@ const process = async (content: ComponentContent) => {
 const types = {
   content: (obj: any) => {
     return z
-      .object({ ...obj, component: z.string() })
+      .object({ ...obj, component: z.string(), meta: c.meta() })
       .strict()
       .transform((val) => process(val as ComponentContent));
+  },
+
+  meta: () => {
+    return z
+      .object({
+        svelte: z.boolean().optional()
+      })
+      .optional();
   },
 
   markdown: (options = {}) => {
