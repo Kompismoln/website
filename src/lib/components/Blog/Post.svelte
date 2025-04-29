@@ -60,7 +60,6 @@
     }
   }
   :global .alert {
-    @reference "tailwindcss";
     @apply my-2 md:my-12;
   }
   :global ul {

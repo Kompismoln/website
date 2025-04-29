@@ -4,7 +4,7 @@ import type { ZodObject } from 'zod';
 export interface Config {
   componentRoot: string;
   contentRoot: string;
-  index: string;
+  indexFile: string;
 }
 
 export interface Fragment {

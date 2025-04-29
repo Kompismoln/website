@@ -56,7 +56,7 @@ export default async function composably(
 
         code = code.replace(/"component":"([^"]+)"/g, (_, path) => {
           const virt = path.startsWith('composably:component');
-          const imp = virt ? path : `${options.componentRoot}/${path}`;
+          const imp = virt ? path : `/${options.componentRoot}/${path}`;
           return `"component":(await import('${imp}.svelte')).default`;
         });
         return code;

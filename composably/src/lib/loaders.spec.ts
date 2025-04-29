@@ -1,7 +1,13 @@
 import { describe, it, expect, vi } from 'vitest';
 import path from 'node:path';
 import { globSync } from 'node:fs';
-import { parseFragment } from './content.loader';
+import { parseFragment, setConfig } from './content.loader';
+
+setConfig({
+  componentRoot: 'src/lib/components',
+  contentRoot: 'src/lib/content',
+  indexFile: 'index'
+});
 
 describe('fragments', () => {
   it('attaches fragments', async () => {

@@ -2,13 +2,7 @@ import composably from './composably/src/lib/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
-import path from 'path';
-
-const composablyOptions = {
-  componentRoot: path.resolve(__dirname, 'src/lib/components/'),
-  contentRoot: path.resolve(__dirname, 'src/lib/content/'),
-  indexFile: 'index',
-};
+import config from './src/lib/config';
 
 export default defineConfig({
   server: {
@@ -21,5 +15,5 @@ export default defineConfig({
       allow: ['composably']
     }
   },
-  plugins: [composably(composablyOptions), tailwindcss(), sveltekit()]
+  plugins: [composably(config.composably), tailwindcss(), sveltekit()]
 });

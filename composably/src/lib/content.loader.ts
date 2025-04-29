@@ -13,7 +13,7 @@ const filetypes = ['js', 'ts', 'json', 'yaml', 'yml', 'md'];
 export let config: Config;
 export const setConfig = (newConfig: Config) => {
   config = newConfig;
-}
+};
 
 /* Probe all filetypes in content root for search path.
  */
