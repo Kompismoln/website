@@ -16,11 +16,9 @@ export default function slots() {
       data.hProperties = hast.properties;
     });
     visit(tree, 'leafDirective', (node) => {
-      if (node.name !== 'slot') return;
       const data = node.data || (node.data = {});
-      const id = node.attributes?.id;
 
-      const hast = h('svelte-component', { 'data-slot': id });
+      const hast = h('svelte-component', { 'data-slot': node.name });
 
       data.hName = hast.tagName;
       data.hProperties = hast.properties;

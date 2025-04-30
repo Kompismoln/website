@@ -3,7 +3,7 @@ components:
   - component: Hero
     primer: 'Hosting - Utveckling - Rådgivning'
     body: |
-      # NixOS-baserad infrastruktur till er tjänst!
+      # {primer} NixOS-baserad infrastruktur till er tjänst!
       En molnbyrå som hjälper människor och företag att
       förverkliga idéer och hantera sin IT-miljö.
       Här hittar du konsulttjänster och decentraliseratde alternativ till

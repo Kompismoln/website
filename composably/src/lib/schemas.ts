@@ -82,7 +82,8 @@ const types = {
     return z.object({ component }).passthrough();
   },
 
-  slots: (allowed = null) => z.record(types.component(allowed)),
+  slots: (allowed = null) => z.record(types.component(allowed)).optional(),
+
   image: () =>
     z.object({
       src: z.string(),

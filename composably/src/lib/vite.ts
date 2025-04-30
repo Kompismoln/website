@@ -74,14 +74,17 @@ async function plugin(
       if (id.startsWith('composably:component')) {
         const path = id.slice(0, -'.svelte'.length);
         const content = virtualComponents[path];
+        const isComponent = true;
 
         const { component, ...props } = content;
         const propString = `{ ${Object.keys(props).join(', ')} }`;
         const scriptString = `<script>\nlet ${propString} = $props();\n</script>\n`;
 
+        const html = isComponent ? props.html : '{@html html}';
+
         return `
           ${scriptString}
-          {@html html}
+          ${html}
         `;
       }
     },

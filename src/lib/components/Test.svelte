@@ -2,8 +2,10 @@
   import { c } from 'composably/schemas';
 
   export const schema = c.content({
+    title: c.string().optional(),
     test: c.string(),
-    body: c.markdown()
+    body: c.markdown(),
+    slots: c.slots()
   });
 </script>
 
