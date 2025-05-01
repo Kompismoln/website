@@ -13,11 +13,7 @@
 </script>
 
 <script lang="ts">
-  import { mountSlots } from 'composably/hooks';
-
-  let { title, h1, date, dateString, body, author, slots } = $props();
-
-  mountSlots(slots);
+  let { title, h1, date, dateString, body, author } = $props();
 
   dateString = dateString ?? date.toISOString().slice(0, 10);
 </script>
@@ -32,7 +28,7 @@
     </header>
 
     <section class="space-y-6">
-      {@html body.html}
+      <body.component {...body} />
     </section>
 
     <section class="mt-8 flex items-center border-t pt-6">

@@ -21,9 +21,7 @@
     <div class="p-4">
       <img class="h-36" src={image.src} alt={image.alt} />
     </div>
-    <p>
-      {@html description.html}
-    </p>
+      <description.component {...description} />
     {#if link}
       <a href={link.url} target={link.blank ? '_blank' : ''}>
         <button class="btn btn-outline btn-primary min-w-[100px]"

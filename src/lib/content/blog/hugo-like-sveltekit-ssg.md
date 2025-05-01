@@ -5,7 +5,7 @@ date: 2025-04-20
 dateString: Written April 20, 2025
 _author: people/_alex.yaml
 slots:
-  evaluation:
+  Evaluation:
     component: Swipe
     slides:
       - component: Card
@@ -40,7 +40,7 @@ slots:
           - [ ] Frictionless shiny things compatibility: Promising
           but remains to be seen.
 
-  simple-internet:
+  SimpleInternet:
     component: Alert
     icon: fa-hippo
     theme: alert-info
@@ -48,13 +48,13 @@ slots:
       Have you also wondered when making webites became difficult?
       Wasn't it easy once?
 
-  treeshaking:
+  Treeshaking:
     component: Alert
     icon: fa-tree
     text: |
       Yes, it's lazy. Components pick what they need and the rest is treeshaked. Good times.
 
-  alert-with-dragon:
+  AlertWithDragon:
     component: Alert
     icon: fa-dragon
     theme: alert-warning
@@ -150,8 +150,8 @@ scale by informing you that zod has transformations that can be used to
 to create complex and decisive types: [^1]
 
 [^1]:
-    All snippets are figments, project lives in
-    https://github.com/kompismoln/website.
+    All snippets are simplifications, project lives in
+    https://github.com/kompismoln/composably.
 
 ```typescript
 const content = (obj: any) => {
@@ -193,11 +193,7 @@ server properly, they can be specified in content instead of code.
 
 - [x] Content-first
 
-:::slot{#simple-internet}
-
-> Have you also wondered when making websites became difficult? Wasn't it easy
-> once?
-> :::
+::SimpleInternet
 
 Look at this structured content:
 
@@ -302,9 +298,9 @@ We can use
 to parse placeholder tags for us, think markdown like this:
 
 ```markdown
-:::slot{#alert-with-dragon}
+:::AlertWithDragon}
 Hello non-javascript user.
-Picture an alert with a font awesome dragon that tells you everything will be alright in swedish.
+Picture an alert with a font awesome dragon assuring you everything will be alright in swedish.
 :::
 ```
 
@@ -327,7 +323,7 @@ import { browser } from '$app/environment';
 if (browser) {
   for (const key in slots) {
     const { component, props } = slots[key];
-    const target = document.querySelector(`[data-slot="${key}"]`);
+    const target = document.querySelector('[data-slot="${key}"]');
 
     if (target) {
       target.innerHTML = '';
@@ -338,10 +334,7 @@ if (browser) {
 ```
 
 Javascript-enabled clients, behold:
-:::slot{#alert-with-dragon}
-Hello non-javascript user.
-Picture an alert with a font awesome dragon that tells you everything will be alright in swedish.
-:::
+::AlertWithDragon
 
 ## Conclusion
 
@@ -349,5 +342,4 @@ The content author (incidentally me) can now pull in graphical elements all
 day, while the developer (also me) can focus on more important things like
 solving sudokus.
 
-:::slot{#evaluation}
-:::
+::Evaluation
