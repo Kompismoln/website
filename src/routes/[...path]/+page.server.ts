@@ -1,4 +1,4 @@
-import { discoverContentPaths, setConfig } from 'composably/content.loader';
+import { discoverContentPaths, setConfig } from 'composably';
 import config from '$lib/config';
 
 setConfig(config.composably);
