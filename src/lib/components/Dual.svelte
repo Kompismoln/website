@@ -25,7 +25,7 @@
       <div
         class="mt-6 flex flex-col place-content-center content-center gap-6 lg:flex-row"
       >
-        {#each panes as pane}
+        {#each panes as pane, key (key)}
           <pane.component {...pane} />
         {/each}
       </div>

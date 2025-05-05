@@ -1,3 +1,7 @@
+import validator from './validator';
+import rehypeDaisyUI from './plugins/rehype-daisyui';
+import type { Config } from 'composably/types';
+
 export default {
   siteName: 'Kompismoln',
   siteUrl: 'https://kompismoln.se',
@@ -31,6 +35,8 @@ export default {
   composably: {
     componentRoot: 'src/lib/components',
     contentRoot: 'src/lib/content',
-    indexFile: 'index'
-  }
+    indexFile: 'index',
+    rehypePlugins: [rehypeDaisyUI],
+    validator
+  } as Config
 };

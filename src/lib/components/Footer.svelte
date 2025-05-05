@@ -28,7 +28,7 @@
   <nav
     class="grid-flow-col gap-4 text-2xl md:place-self-center md:justify-self-end"
   >
-    {#each socials as social}
+    {#each socials as social, key (key)}
       <a href={social.src} aria-label={social.platform}>
         <i class="fa-brands fa-{social.platform}"></i>
       </a>

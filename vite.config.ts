@@ -1,6 +1,7 @@
-import composably from 'composably/vite';
-import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
+import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
+import { composably } from 'composably/vite';
 import config from './src/lib/config';
 
 export default defineConfig({
@@ -9,7 +10,7 @@ export default defineConfig({
       ignored: ['**/.direnv/**']
     },
     host: '0.0.0.0',
-    allowedHosts: true,
+    allowedHosts: true
   },
-  plugins: [composably(config.composably), tailwindcss() ]
+  plugins: [sveltekit(), tailwindcss(), composably(config.composably)]
 });

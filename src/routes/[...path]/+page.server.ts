@@ -1,6 +1,5 @@
-import { discoverContentPaths, setConfig } from 'composably';
+import { discoverContentPaths } from 'composably';
 import config from '$lib/config';
 
-setConfig(config.composably);
-
-export const entries = () => discoverContentPaths().map((path) => ({ path }));
+export const entries = () =>
+  discoverContentPaths(config.composably).map((path) => ({ path }));

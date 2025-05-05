@@ -14,5 +14,5 @@
 
 <div role="alert" class="not-prose alert {theme}">
   <i class="fa-solid text-3xl {icon}"></i>
-  <span>{@html text.html}</span>
+  <span><text.component {...text} /></span>
 </div>

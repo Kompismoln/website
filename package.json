@@ -29,7 +29,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.13.17",
     "animate.css": "^4.1.1",
-    "composably": "^0.0.1",
+    "composably": "file:../composably",
     "daisyui": "^5.0.9",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
@@ -50,5 +50,10 @@
     "vite": "^6.0.0",
     "vite-plugin-inspect": "^11.0.0",
     "vitest": "^3.0.0"
+  },
+  "dependencies": {
+    "@types/hast": "^3.0.4",
+    "hast-util-classnames": "^3.0.0",
+    "unist-util-visit": "^5.0.0"
   }
 }

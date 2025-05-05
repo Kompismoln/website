@@ -17,7 +17,7 @@
     <div
       class="mx-auto mt-12 flex max-w-[1064px] flex-wrap place-content-center gap-6"
     >
-      {#each items as item}
+      {#each items as item, key (key)}
         <item.component {...item.props} />
       {/each}
     </div>

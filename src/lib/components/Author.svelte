@@ -17,5 +17,5 @@
 </div>
 <div class="ml-4">
   <p class="text-primary font-semibold">{name}</p>
-  <span class="text-accent text-sm">{@html bio.html}</span>
+  <span class="text-accent text-sm"><bio.component {...bio} /></span>
 </div>

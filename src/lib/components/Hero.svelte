@@ -3,9 +3,7 @@
 
   export const schema = c.content({
     primer: c.string(),
-    body: c.markdown({
-      decreaseHeadings: false
-    }),
+    body: c.markdown(),
     buttons: c.array(c.button()).max(2)
   });
 </script>
@@ -68,7 +66,7 @@
       </div>
       {#if buttons}
         <div class="flex flex-row flex-wrap place-content-center gap-4">
-          {#each buttons as button}
+          {#each buttons as button, key (key)}
             <a href={button.url}>
               <button class:btn-outline={!button.fill} class="btn btn-primary">
                 {button.text}

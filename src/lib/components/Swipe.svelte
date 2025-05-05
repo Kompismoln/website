@@ -47,7 +47,7 @@
       coverflow-effect-slide-shadows="false"
       init="false"
     >
-      {#each slides as slide}
+      {#each slides as slide, key (key)}
         <swiper-slide class="flex items-center justify-center">
           <slide.component {...slide} />
         </swiper-slide>

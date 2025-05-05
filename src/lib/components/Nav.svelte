@@ -27,7 +27,7 @@
   </div>
   <div class="navbar-end">
     <ul class="menu menu-horizontal hidden text-lg font-bold sm:flex">
-      {#each menu as item}
+      {#each menu as item, key (key)}
         <li class="md:mx-2"><a href={item.url}>{item.text}</a></li>
       {/each}
       {#if searchPage}
@@ -69,7 +69,7 @@
         tabindex="0"
         class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 font-bold shadow-sm"
       >
-        {#each menu as item}
+        {#each menu as item, key (key)}
           <li class="md:mx-2"><a href={item.url}>{item.text}</a></li>
         {/each}
       </ul>

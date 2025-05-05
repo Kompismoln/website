@@ -12,7 +12,7 @@
 
 <div class="mx-auto text-center">
   <div class="markdown-content">
-    {@html body.html}
+    <body.component {...body} />
   </div>
 </div>
 

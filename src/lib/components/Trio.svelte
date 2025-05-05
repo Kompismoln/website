@@ -11,11 +11,12 @@
   let { title, panes } = $props();
 </script>
 
+{title}
 <div class="text-center">
   <div
     class="mx-auto grid max-w-screen-lg grid-cols-1 overflow-x-auto md:grid-cols-3"
   >
-    {#each panes as pane}
+    {#each panes as pane, key (key)}
       <pane.component {...pane} />
     {/each}
   </div>

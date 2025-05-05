@@ -1,0 +1,5 @@
+ignoredBuiltDependencies:
+  - esbuild
+
+overrides:
+  composably: file:../composably

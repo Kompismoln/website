@@ -15,7 +15,7 @@
   <div class="my-auto">
     <div class="px-4">
       <div class="markdown-content space-y-6">
-        {@html body.html}
+        <body.component {...body} />
       </div>
       <div class="mt-6 px-4 text-lg md:text-xl"></div>
       <div class="text-large mt-4">
